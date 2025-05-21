@@ -8,9 +8,9 @@ const routes = [
     component: DashboardLayout,
     children: [
       { path: '', component: DashboardPage },
-      { path: 'debt', component: () => import('@/features/debt/pages/DebtTrackerPage.vue') },
-      { path: 'todo', component: () => import('@/features/todo/pages/TodoListPage.vue') },
-      { path: 'tasks', component: () => import('@/features/work/pages/WorkTasksPage.vue') },
+      // { path: 'debt', component: () => import('@/features/debt/pages/DebtTrackerPage.vue') },
+      // { path: 'todo', component: () => import('@/features/todo/pages/TodoListPage.vue') },
+      // { path: 'tasks', component: () => import('@/features/work/pages/WorkTasksPage.vue') },
     ],
   },
 ];
