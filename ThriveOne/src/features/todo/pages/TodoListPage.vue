@@ -13,10 +13,8 @@ onMounted(() => {
 
 <template>
     <div>
-        <h2 >📝 Todo List</h2>
+        <h2>Todo</h2>
         <TodoInput />
-        <div>
-            <TodoItem v-for="todo in store.todos" :key="todo.id" :todo="todo" />
-        </div>
+        <TodoItem :todos="store.todos" />
     </div>
 </template>

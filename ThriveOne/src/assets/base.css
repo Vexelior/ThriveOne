@@ -28,3 +28,39 @@ h5,
 h6 {
     font-family: 'Roboto', sans-serif;
 }
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--quaternary);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary);
+    color: var(--quaternary);
+    transition: background-color 0.3s ease;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+textarea {
+    border: 1px solid var(--dimgray);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+    border-color: var(--primary) !important;
+    outline: none !important;
+    box-shadow: 0 0 5px var(--primary) !important;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: var(--primary);
+}

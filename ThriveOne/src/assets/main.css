@@ -22,25 +22,49 @@
   width: 100%;
 }
 
-.sidebar nav a {
+.sidebar a {
   color: var(--quaternary);
   text-decoration: none;
   width: 100%;
   text-align: left;
 }
 
-.sidebar nav a:hover {
+.sidebar a:hover {
   color: var(--secondary);
+  transition: color 0.3s ease;
 }
 
-.sidebar nav a.active {
+.sidebar a.active {
   color: var(--quaternary);
 }
 
-.sidebar-nav-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.sidebar h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--quaternary);
+  text-align: center !important;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+}
+
+.sidebar-menu .nav-item {
+  margin: 0.5rem 0;
+}
+
+.sidebar-menu .svg-inline--fa {
+  margin-right: 0.5rem !important;
+}
+
+.sidebar-menu .nav-item a {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .content-wrapper {
@@ -49,3 +73,27 @@
   color: var(--black);
   padding: 2rem;
 }
+
+.todo-item .dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.nav-tabs .nav-link {
+  color: var(--black);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--primary);
+  color: var(--quaternary);
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--secondary);
+  color: var(--quaternary);
+  transition: background-color 0.3s ease;
+}
+

@@ -9,9 +9,7 @@ export const useTodoStore = defineStore('todo', () => {
   function fetchTodos() {
     apiClient.get('/todo')
       .then((response) => {
-        console.log('Response:', response); // Log the full response
-        todos.value = response as unknown as Todo[]; // Directly assign the response to todos.value
-        console.log('Todos:', todos.value);
+        todos.value = response as unknown as Todo[];
       })
       .catch((error) => {
         console.error('Error fetching todos:', error);
@@ -34,14 +32,14 @@ export const useTodoStore = defineStore('todo', () => {
       })
   }
 
-  function addTodo(title: string, description: string) {
+  function addTodo(title: string, description: string, due: string) {
     const newTodo: Todo = {
       id: '',
-      title,
-      description,
+      title: title,
+      description: description,
       created: new Date().toISOString(),
       completed: null,
-      due: null,
+      due: due,
       isCompleted: false,
     }
     apiClient.post('/todo', newTodo)
@@ -55,12 +53,8 @@ export const useTodoStore = defineStore('todo', () => {
 
   function updateTodo(id: string, todo: Todo) {
     apiClient.put(`/todo/${id}`, todo)
-      .then((response) => {
-        const updatedTodo = response.data as Todo
-        const index = todos.value.findIndex(t => t.id === id)
-        if (index !== -1) {
-          todos.value[index] = updatedTodo
-        }
+      .then(() => {
+        fetchTodos()
       })
       .catch((error) => {
         console.error('Error updating todo:', error)
@@ -70,15 +64,11 @@ export const useTodoStore = defineStore('todo', () => {
   function deleteTodo(id: string) {
     apiClient.delete(`/todo/${id}`)
       .then(() => {
-        todos.value = todos.value.filter(todo => todo.id !== id)
+        fetchTodos()
       })
       .catch((error) => {
         console.error('Error deleting todo:', error)
       })
-  }
-  
-  function toggleTodo(id: string, completed: boolean) {
-    apiClient.post(`/todo/${id}/${completed}`);
   }
 
   return {
@@ -88,6 +78,5 @@ export const useTodoStore = defineStore('todo', () => {
     addTodo,
     updateTodo,
     deleteTodo,
-    toggleTodo
   }
 })
