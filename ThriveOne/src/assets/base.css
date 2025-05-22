@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('./fonts/OpenSans.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('./fonts/Roboto.ttf') format('truetype');
+}
+
+:root {
+    --primary: #14213D;
+    --secondary: #FCA311;
+    --info: #8D99AE;
+    --tertiary: #E5E5E5;
+    --quaternary: #FFFFFF;
+    --black: #000000;
+    --danger: #b91111;
+    --dimgray: #bdbdbd;
+    --warning: #ffcc00;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Roboto', sans-serif;
+}
