@@ -6,16 +6,15 @@ import type { WorkTask } from '../types/worktask'
 export const useWorkTaskStore = defineStore('WorkTask', () => {
   const workTasks = ref<WorkTask[]>([])
 
-  function fetchWorkTasks(): Promise<WorkTask[]> {
-    return apiClient.get('/WorkTask')
-      .then((response) => {
-        workTasks.value = response as unknown as WorkTask[];
-        return workTasks.value;
-      })
-      .catch((error) => {
-        console.error('Error fetching WorkTasks:', error);
-        return [];
-      });
+  async function fetchWorkTasks(): Promise<WorkTask[]> {
+    try {
+      const response = await apiClient.get('/WorkTask')
+      workTasks.value = response as unknown as WorkTask[]
+      return workTasks.value
+    } catch (error) {
+      console.error('Error fetching WorkTasks:', error)
+      return []
+    }
   }
   
   function fetchWorkTaskById(id: string) {
@@ -34,19 +33,8 @@ export const useWorkTaskStore = defineStore('WorkTask', () => {
       })
   }
 
-  function addWorkTask(title: string, description: string, completedAt: string, dueDate: string, priority: string, status: string, markdown: string, html: string) {
-    const newWorkTask: WorkTask = {
-      id: '',
-      title: title,
-      description: description,
-      completedAt: completedAt,
-      dueDate: dueDate,
-      priority: priority,
-      status: status,
-      markdown: markdown,
-      html: html,
-    }
-    apiClient.post('/WorkTask', newWorkTask)
+  function addWorkTask(workTask : WorkTask) {
+    apiClient.post('/WorkTask', workTask)
       .then(() => {
         fetchWorkTasks()
       })
@@ -56,23 +44,25 @@ export const useWorkTaskStore = defineStore('WorkTask', () => {
   }
 
   function updateWorkTask(id: string, worktask: WorkTask) {
-    apiClient.put(`/WorkTask/${id}`, worktask)
+    const updatedTask = apiClient.put(`/WorkTask/${id}`, worktask)
       .then(() => {
         fetchWorkTasks()
       })
       .catch((error) => {
         console.error('Error updating WorkTask:', error)
       })
+    return updatedTask;
   }
 
   function deleteWorkTask(id: string) {
-    apiClient.delete(`/WorkTask/${id}`)
+    const deletedTask = apiClient.delete(`/WorkTask/${id}`)
       .then(() => {
         fetchWorkTasks()
       })
       .catch((error) => {
         console.error('Error deleting WorkTask:', error)
       })
+    return deletedTask;
   }
 
   return {

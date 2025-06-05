@@ -1,118 +1,135 @@
-<script setup>
-import { ref, watch, defineProps, defineEmits, onMounted } from 'vue';
+<script setup lang="ts">
+import { watch, ref, defineProps, defineEmits, onMounted } from 'vue';
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
+import { WorkTask } from '../types/worktask';
 import showdown from 'showdown';
 import { Modal } from 'bootstrap';
 
 const store = useWorkTaskStore();
 
-const props = defineProps({
-    selectedTask: {
-        type: Object,
-        default: null,
-    },
+const props = defineProps<{
+    selectedTask: WorkTask | null
+}>();
+
+const emit = defineEmits<{
+    (e: 'update:selectedTask', task: WorkTask | null): void;
+    (e: 'task-success', message: string): void;
+    (e: 'task-error', message: string): void;
+}>();
+
+const taskId = ref(props.selectedTask ? props.selectedTask.id : '');
+const taskTitle = ref(props.selectedTask ? props.selectedTask.title : '');
+const taskDescription = ref(props.selectedTask ? props.selectedTask.description : '');
+const taskPriority = ref(props.selectedTask ? props.selectedTask.priority : 'Low');
+const taskStatus = ref(props.selectedTask ? props.selectedTask.status : 'Not Started');
+const taskDueDate = ref(props.selectedTask ? props.selectedTask.dueDate : '');
+const taskCompletedDate = ref(props.selectedTask ? props.selectedTask.completedAt : '');
+const taskMarkdown = ref(props.selectedTask ? props.selectedTask.markdown : '');
+const taskHtml = ref(props.selectedTask ? props.selectedTask.html : '');
+
+onMounted(() => {
+    if (props.selectedTask) {
+        taskId.value = props.selectedTask.id;
+        taskTitle.value = props.selectedTask.title;
+        taskDescription.value = props.selectedTask.description;
+        taskPriority.value = props.selectedTask.priority;
+        taskStatus.value = props.selectedTask.status;
+        taskDueDate.value = props.selectedTask.dueDate;
+        taskCompletedDate.value = props.selectedTask.completedAt || '';
+        taskMarkdown.value = props.selectedTask.markdown;
+        taskHtml.value = props.selectedTask.html;
+    }
 });
-
-const emit = defineEmits([
-    'update:selected-task',
-    'task-success',
-    'task-error',
-]);
-
-const taskId = ref('');
-const taskTitle = ref('');
-const taskDescription = ref('');
-const taskPriority = ref('');
-const taskStatus = ref('');
-const taskDueDate = ref('');
-const taskMarkdown = ref('');
-const taskCompletedDate = ref('');
-
-const formatDate = (date) => {
-    if (!date) return '';
-    return new Date(date).toISOString().split('T')[0];
-};
-
-const updateTaskFields = (task) => {
-    taskId.value = task?.id || '';
-    taskTitle.value = task?.title || '';
-    taskDescription.value = task?.description || '';
-    taskPriority.value = task?.priority || '';
-    taskStatus.value = task?.status || '';
-    taskDueDate.value = formatDate(task?.dueDate) || '';
-    taskMarkdown.value = task?.markdown || '';
-    taskCompletedDate.value = formatDate(task?.completedAt) || '';
-};
 
 watch(
     () => props.selectedTask,
-    (newTask) => {
-        if (newTask) {
-            updateTaskFields(newTask);
+    (task: WorkTask | null) => {
+        if (task) {
+            taskId.value = task.id;
+            taskTitle.value = task.title;
+            taskDescription.value = task.description;
+            taskPriority.value = task.priority;
+            taskStatus.value = task.status;
+            taskDueDate.value = formatDate(task.dueDate);
+            taskCompletedDate.value = formatDate(task.completedAt) || '';
+            taskMarkdown.value = task.markdown;
+            taskHtml.value = task.html;
+        } else {
+            taskId.value = '';
+            taskTitle.value = '';
+            taskDescription.value = '';
+            taskPriority.value = 'Low';
+            taskStatus.value = 'Not Started';
+            taskDueDate.value = '';
+            taskCompletedDate.value = '';
+            taskMarkdown.value = '';
+            taskHtml.value = '';
         }
     },
     { immediate: true }
 );
 
-const handleTaskEdit = async () => {
-    const updatedTask = {
+const formatDate = (date: string | number | Date) => {
+    if (!date) return '';
+    return new Date(date).toISOString().split('T')[0];
+};
+
+function handleTaskEdit() {
+    const updatedTask: WorkTask = {
         id: taskId.value,
         title: taskTitle.value,
         description: taskDescription.value,
         priority: taskPriority.value,
         status: taskStatus.value,
         dueDate: taskDueDate.value,
-        markdown: taskMarkdown.value,
         completedAt: taskCompletedDate.value,
+        markdown: taskMarkdown.value,
+        html: new showdown.Converter().makeHtml(taskHtml.value)
     };
-    const converter = new showdown.Converter();
-    const html = converter.makeHtml(taskMarkdown.value);
-    updatedTask.html = html;
-    try {
-        await store.updateWorkTask(updatedTask.id, updatedTask);
-        emit('update:selected-task', updatedTask);
-        emit('task-success', 'Task updated successfully!');
-    } catch (error) {
-        console.error('Error updating task:', error);
-        emit('task-error', 'Failed to update task - ' + error.response.data.title);
-        return;
-    }
-};
 
-const handleTaskDelete = async () => {
-    if (confirm('Are you sure you want to delete this task?')) {
-        try {
-            await deleteTask(taskId.value);
-            emit('update:selected-task', null);
-            emit('task-success', 'Task deleted successfully!');
-        } catch (error) {
-            console.error('Error deleting task:', error);
-            emit('task-error', 'Failed to delete task.');
-        } finally {
-            const modal = document.getElementById('edit-task-modal');
-            if (modal) {
-                const modalInstance = Modal.getInstance(modal) || new Modal(modal);
-                modalInstance.hide();
-                var backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.remove();
-                }
-            }
-            resetForm();
-        }
-    }
-};
+    store.updateWorkTask(updatedTask.id, updatedTask)
+        .then(() => {
+            emit('task-success', 'Task updated successfully');
+            emit('update:selectedTask', null);
+        })
+        .catch((error) => {
+            emit('task-error', `Error updating task: ${error.message}`);
+        });
 
-const resetForm = () => {
+    store.fetchWorkTasks().then(tasks => {
+        store.workTasks = tasks;
+    });
+
+    // Reset the form fields after editing
     taskId.value = '';
     taskTitle.value = '';
     taskDescription.value = '';
-    taskPriority.value = '';
-    taskStatus.value = '';
+    taskPriority.value = 'Low';
+    taskStatus.value = 'Not Started';
     taskDueDate.value = '';
-    taskMarkdown.value = '';
     taskCompletedDate.value = '';
-};
+    taskMarkdown.value = '';
+    taskHtml.value = '';
+    emit('update:selectedTask', null);
+    const modal = document.getElementById('edit-task-modal');
+    if (modal) {
+        const bootstrapModal = Modal.getInstance(modal) || new Modal(modal);
+        bootstrapModal.hide();
+    }
+}
+
+function handleTaskDelete() {
+    if (!taskId.value) return;
+
+    store.deleteWorkTask(taskId.value)
+        .then(() => {
+            emit('task-success', 'Task deleted successfully');
+            emit('update:selectedTask', null);
+        })
+        .catch((error) => {
+            emit('task-error', `Error deleting task: ${error.message}`);
+        });
+}
 </script>
 
 <template>
@@ -122,7 +139,7 @@ const resetForm = () => {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="card-title" id="task-modal-title">
-                        {{ selectedTask ? 'Edit Task' : 'New Task' }}
+                        Edit Task
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -134,7 +151,7 @@ const resetForm = () => {
                                 <div class="mb-3">
                                     <label for="titleInput" class="form-label">Title</label>
                                     <input type="text" class="form-control" id="task-title" required
-                                        placeholder="Enter task title" v-model="taskTitle">
+                                        placeholder="Enter task title" v-model="taskTitle" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="titleInput" class="form-label">Description</label>

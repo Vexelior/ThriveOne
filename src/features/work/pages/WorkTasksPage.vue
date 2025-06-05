@@ -5,7 +5,7 @@ import EditTaskModal from '../components/EditTaskModal.vue'
 import NewTaskModal from '../components/NewTaskModal.vue'
 import CalendarModal from '../components/CalendarModal.vue'
 import { updateCalendar } from '../components/CalendarModal.vue';
-import { WorkTask } from '../types/WorkTask';
+import { WorkTask } from '../types/worktask';
 
 const store = useWorkTaskStore()
 
@@ -22,17 +22,31 @@ function handleSuccess(message: string) {
     alertMessage.value = message;
     alertType.value = 'alert-success';
     store.fetchWorkTasks();
+    selectedTask.value = null;
+    setTimeout(() => {
+        alertMessage.value = '';
+        alertType.value = '';
+    }, 3000);
 }
 
 function handleError(message: string) {
     alertMessage.value = message;
     alertType.value = 'alert-danger';
+    setTimeout(() => {
+        alertMessage.value = '';
+        alertType.value = '';
+    }, 3000);
 }
 
 function handleTaskSelection(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const taskId = selectElement.value;
-    selectedTask.value = store.workTasks.find(task => task.id === taskId) || null;
+    const foundTask =  store.workTasks.find(task => task.id === taskId);
+    if (foundTask) {
+        selectedTask.value = foundTask;
+    } else {
+        selectedTask.value = null;
+    }
 }
 </script>
 
@@ -40,7 +54,6 @@ function handleTaskSelection(event: Event) {
     <div>
         <CalendarModal />
         <NewTaskModal />
-        <EditTaskModal />
         <h1 class="display-4 text-center mt-3">Work Task Tracker</h1>
         <section class="container">
             <div class="row">
@@ -85,7 +98,7 @@ function handleTaskSelection(event: Event) {
                     </button>
                 </div>
             </div>
-            <EditTaskModal v-model:selected-task="selectedTask" @task-success="handleSuccess"
+            <EditTaskModal v-model:selectedTask="selectedTask" @task-success="handleSuccess"
                 @task-error="handleError" />
             <NewTaskModal @task-success="handleSuccess" @task-error="handleError" />
         </section>
