@@ -97,3 +97,66 @@
   transition: background-color 0.3s ease;
 }
 
+.calendar {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar .dates {
+  border: 1px solid #ccc;
+}
+
+.calendar .months {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.calendar .months .each-month:hover {
+  cursor: pointer;
+}
+
+.calendar .months .selected {
+  background-color: var(--primary);
+  color: #fff;
+  border-radius: 5px;
+}
+
+.calendar .selected-day {
+  background-color: var(--info);
+  color: white;
+}
+
+#calendar-body td {
+  padding: 10px;
+}
+
+#calendar-body .today {
+  background-color: var(--secondary);
+  color: #fff;
+  border-radius: 5px;
+}
+
+.calendar .triangle-left {
+  float: left;
+  position: relative;
+}
+
+.calendar .triangle-right {
+  float: right;
+  position: relative;
+}
+
+.calendar .triangle-left:hover {
+  color: var(--secondary);
+  cursor: pointer;
+}
+
+.calendar .triangle-right:hover {
+  color: var(--secondary);
+  cursor: pointer;
+}

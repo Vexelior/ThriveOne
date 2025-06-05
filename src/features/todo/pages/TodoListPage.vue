@@ -13,7 +13,7 @@ onMounted(() => {
 
 <template>
     <div>
-        <h2>Todo</h2>
+        <h1 class="display-4 text-center mt-3">Todo</h1>
         <TodoInput />
         <TodoItem :todos="store.todos" />
     </div>
