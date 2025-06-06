@@ -12,7 +12,6 @@ function handleModalShow() {
 }
 
 async function updateCalendar() {
-    console.log('Updating calendar...');
     initializeCalendar();
     renderCalendar();
 }

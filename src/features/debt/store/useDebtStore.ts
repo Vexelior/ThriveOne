@@ -2,6 +2,7 @@ import apiClient  from '../../../api/api'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Debt } from '../types/debt'
+import type { Image } from '../types/image'
 
 export const useDebtStore = defineStore('debt', () => {
   const debts = ref<Debt[]>([])
@@ -19,7 +20,6 @@ export const useDebtStore = defineStore('debt', () => {
   function fetchDebtById(id: string) {
     return apiClient.get(`/debt/${id}`)
       .then((response) => {
-        console.log('Debt fetched:', response)
         return response
       })
       .catch((error) => {
@@ -132,6 +132,38 @@ export const useDebtStore = defineStore('debt', () => {
       })
   }
 
+  function uploadImage(imageObject: Image) {
+    return apiClient.post('/debtimage', imageObject)
+      .then((response) => {
+        return response
+      })
+      .catch((error) => {
+        console.error('Error uploading image:', error)
+        throw error
+      })
+  }
+
+  function getAllImages() {
+    return apiClient.get('/debtimage')
+      .then((response) => {
+        return response as unknown as Image[]
+      })
+      .catch((error) => {
+        console.error('Error fetching images:', error)
+        throw error
+      })
+  }
+
+  async function getImageByName(imageName: string) {
+    try {
+      const response = await apiClient.get(`/debtimage/GetByName?name=${imageName}`)
+      return response as unknown as Image
+    } catch (error) {
+      console.error('Error fetching image by name:', error)
+      throw error
+    }
+  }
+
   return {
     debts,
     fetchDebts,
@@ -143,6 +175,9 @@ export const useDebtStore = defineStore('debt', () => {
     fetchDebtPreviousAmounts,
     fetchDebtHistory,
     fetchPreviousPercentages,
-    fetchCharges
+    fetchCharges,
+    uploadImage,
+    getAllImages,
+    getImageByName
   }
 })

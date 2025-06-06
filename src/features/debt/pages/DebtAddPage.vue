@@ -1,11 +1,136 @@
 <script lang="ts" setup>
-import { useDebtStore } from '@/stores/debt';
-import { computed, onMounted } from 'vue';
+import { useDebtStore } from '@/features/debt/store/useDebtStore';
+import { computed, onMounted, ref } from 'vue';
+
+const store = useDebtStore();
+const creditor = ref('');
+const amount = ref(0);
+const minimumPayment = ref(0);
+const interestRate = ref(0);
+const type = ref('');
+const notes = ref('');
+const image = ref('');
+const showFileInput = ref(false);
+const allImages = computed(() => store.images);
+const error = ref('');
+const success = ref('');
+const imageInput = ref(null);
+const images = ref([]);
+
+onMounted(async () => {
+    try {
+        store.images = await store.getAllImages();
+        for (const img of store.images) {
+            images.value.push({
+                id: img.id,
+                name: img.name,
+                source: img.source,
+                uploaded: new Date(img.uploaded).toLocaleDateString()
+            });
+        }
+    } catch (err) {
+        error.value = 'Failed to load images. Please try again.';
+    }
+});
+
+const addDebt = async () => {
+    try {
+        const selectedImage = allImages.value.find(img => img.source === image.value);
+        const newDebt = {
+            creditor: creditor.value,
+            amount: amount.value,
+            minimumPayment: minimumPayment.value,
+            interestRate: interestRate.value,
+            type: type.value,
+            notes: notes.value,
+            image: selectedImage.name,
+            remainingAmount: amount.value,
+            percentageChange: 0,
+            lastPayment: 0,
+            imageSource: selectedImage.source,
+            imageId: selectedImage.id
+        }
+        await store.addDebt(newDebt);
+        success.value = 'Debt added successfully!';
+        resetForm();
+    } catch (err) {
+        error.value = 'Failed to add debt. Please try again.';
+        console.error('Error adding debt:', err);
+    }
+};
+
+const resetForm = () => {
+    creditor.value = '';
+    amount.value = 0;
+    minimumPayment.value = 0;
+    interestRate.value = 0;
+    type.value = '';
+    notes.value = '';
+    image.value = '';
+    showFileInput.value = false;
+};
+
+const toggleFileInput = () => {
+    showFileInput.value = !showFileInput.value;
+    if (showFileInput.value) {
+        image.value = '';
+        imageInput.value.value = '';
+    } else {
+        image.value = '';
+        imageInput.value.value = '';
+    }
+};
+
+const onImageChange = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+        image.value = URL.createObjectURL(file);
+    } else {
+        image.value = event.target.value;
+    }
+};
+
+const addImage = async () => {
+    if (imageInput.value && imageInput.value.files.length > 0) {
+        const file = imageInput.value.files[0];
+        try {
+            const img = {
+                name: file.name,
+                source: await convertFileToBase64(file),
+                uploaded: new Date().toISOString()
+            };
+            await store.uploadImage(img);
+            success.value = 'Image uploaded successfully!';
+            resetForm();
+            await store.getAllImages();
+        } catch {
+            error.value = 'Failed to upload image. Please try again.';
+        }
+    } else {
+        error.value = 'Please select an image to upload.';
+    }
+    if (imageInput.value) imageInput.value.value = '';
+    showFileInput.value = false;
+    try {
+        store.images = await store.getAllImages();
+        allImages.value = store.images;
+    } catch (err) {
+        error.value = 'Failed to load images after upload. Please try again.';
+    }
+};
+
+const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+    });
+};
 </script>
 <template>
     <div class="container">
         <h1 class="my-4">New Debt</h1>
-        <!--ERROR MESSAGES-->
         <div class="alert alert-warning alert-dismissible" role="alert" v-if="error">
             <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="me-2" />
             {{ error }}
@@ -16,7 +141,7 @@ import { computed, onMounted } from 'vue';
             {{ success }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <form @submit.prevent="addDebt">
+        <form @submit.prevent="addDebt" class="add-debt-form">
             <div class="mb-3">
                 <label for="creditor" class="form-label">Creditor</label>
                 <input id="creditor" v-model="creditor" type="text" class="form-control" placeholder="Creditor"
@@ -67,7 +192,8 @@ import { computed, onMounted } from 'vue';
             <div v-if="showFileInput" class="d-flex justify-content-start mb-3">
                 <button type="button" class="btn btn-primary btn-sm me-2" @click="addImage">Upload</button>
                 <div class="form-file w-50">
-                    <input id="image" ref="image" type="file" class="form-file-input w-100" accept="image/*" required />
+                    <input id="image" ref="imageInput" type="file" class="form-file-input w-100" accept="image/*"
+                        required @change="onImageChange" />
                 </div>
             </div>
             <div class="mb-3">
@@ -75,7 +201,7 @@ import { computed, onMounted } from 'vue';
             </div>
             <div class="d-flex justify-content-start">
                 <button type="submit" class="btn btn-primary me-2">Submit</button>
-                <router-link to="/" class="btn btn-secondary">Back</router-link>
+                <router-link to="/debt" class="btn btn-secondary">Back</router-link>
             </div>
         </form>
     </div>

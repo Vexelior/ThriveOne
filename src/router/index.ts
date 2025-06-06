@@ -16,7 +16,7 @@ const routes = [
       { path: '', component: DashboardPage },
       { path: '/debt', component: DebtTrackerPage },
       { path: '/debt/add-debt', component: DebtAddPage },
-      { path: '/debt/:id', component: DebtDetailPage},
+      { path: '/debt/:id', component: DebtDetailPage, props: true },
       { path: '/todo', component: TodoListPage },
       { path: '/worktasks', component: WorkTasksPage },
     ],

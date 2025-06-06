@@ -224,3 +224,16 @@ select:focus {
 .dropdown .nav-link:focus {
   color: var(--secondary) !important;
 }
+
+.debt-list-container a {
+  color: var(--quaternary) !important;
+  text-decoration: none !important;
+}
+
+.add-debt-form {
+  background-color: var(--quaternary) !important;
+  padding: 1rem !important;
+  border-radius: 5px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid var(--primary) !important;
+}
