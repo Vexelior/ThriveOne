@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Debt } from '../types/debt'
 import type { Image } from '../types/image'
+import type { Payment } from '../types/payment'
+import type { InterestCharge } from '../types/interestcharge'
 
 export const useDebtStore = defineStore('debt', () => {
   const debts = ref<Debt[]>([])
@@ -164,6 +166,42 @@ export const useDebtStore = defineStore('debt', () => {
     }
   }
 
+  async function addPayment(debtId: string, amount: number, date: string) {
+    const payment: Payment = {
+      id: '',
+      debtId: debtId,
+      amount: amount,
+      date: date
+    }
+    console.log('Adding payment:', payment)
+    return apiClient.post('/debtpayment', payment)
+      .then((response) => {
+        return response
+      })
+      .catch((error) => {
+        console.error('Error adding payment:', error)
+        throw error
+      })
+  }
+
+  async function addInterestCharge(debtId: string, amount: number, date: string, description: string) {
+    const interestCharge: InterestCharge = {
+      id: '',
+      debtId: debtId,
+      amount: amount,
+      date: date,
+      description: description
+    }
+    return apiClient.post('/debtinterestcharge', interestCharge)
+      .then((response) => {
+        return response
+      })
+      .catch((error) => {
+        console.error('Error adding interest charge:', error)
+        throw error
+      })
+  }
+
   return {
     debts,
     fetchDebts,
@@ -178,6 +216,8 @@ export const useDebtStore = defineStore('debt', () => {
     fetchCharges,
     uploadImage,
     getAllImages,
-    getImageByName
+    getImageByName,
+    addPayment,
+    addInterestCharge
   }
 })

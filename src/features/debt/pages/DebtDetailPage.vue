@@ -94,11 +94,11 @@ const formattedPercentage = (percentage: number) => {
                                                 class="dropdown-item">Edit</router-link>
                                         </li>
                                         <li>
-                                            <router-link :to="`/add-payment/${debt.id}`" class="dropdown-item">Add
+                                            <router-link :to="`/debt/payment/add/${debt.id}`" class="dropdown-item">Add
                                                 Payment</router-link>
                                         </li>
                                         <li>
-                                            <router-link :to="`/add-interest-charge/${debt.id}`"
+                                            <router-link :to="`/debt/interest-charge/add/${debt.id}`"
                                                 class="dropdown-item">Add
                                                 Interest Charge</router-link>
                                         </li>

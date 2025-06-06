@@ -17,7 +17,7 @@ onMounted(() => {
             <div class="flex-fill d-flex justify-content-center">
                 <h1 class="display-4 text-center mt-3 mb-3 mb-md-0">Debt</h1>
             </div>
-            <router-link class="btn btn-primary ms-md-3" to="debt/add-debt" style="height: auto;">
+            <router-link class="btn btn-primary ms-md-3" to="debt/add" style="height: auto;">
                 Add
             </router-link>
         </div>
