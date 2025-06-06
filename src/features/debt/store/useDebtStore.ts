@@ -17,18 +17,14 @@ export const useDebtStore = defineStore('debt', () => {
   }
   
   function fetchDebtById(id: string) {
-    apiClient.get(`/debt/${id}`)
+    return apiClient.get(`/debt/${id}`)
       .then((response) => {
-        const debt = response.data as Debt
-        const index = debts.value.findIndex(t => t.id === id)
-        if (index !== -1) {
-          debts.value[index] = debt
-        } else {
-          debts.value.push(debt)
-        }
+        console.log('Debt fetched:', response)
+        return response
       })
       .catch((error) => {
         console.error('Error fetching debt:', error)
+        throw error
       })
   }
 
@@ -61,7 +57,7 @@ export const useDebtStore = defineStore('debt', () => {
       })
   }
 
-  function updateTodo(id: string, debt: Debt) {
+  function updateDebt(id: string, debt: Debt) {
     apiClient.put(`/debt/${id}`, debt)
       .then(() => {
         fetchDebts()
@@ -71,7 +67,7 @@ export const useDebtStore = defineStore('debt', () => {
       })
   }
 
-  function deleteTodo(id: string) {
+  function deleteDebt(id: string) {
     apiClient.delete(`/debt/${id}`)
       .then(() => {
         fetchDebts()
@@ -81,12 +77,72 @@ export const useDebtStore = defineStore('debt', () => {
       })
   }
 
+  function fetchPayments(id: string) {
+    return apiClient.get(`/debtpayment/${id}`)
+      .then((response) => {
+        return response
+      })
+      .catch((error) => {
+        console.error('Error fetching payments:', error)
+        throw error
+      })
+  }
+
+  function fetchDebtPreviousAmounts(id: string) {
+    return apiClient.get(`/debtpreviousamount/${id}`)
+      .then((response) => {
+        return response     
+      })
+      .catch((error) => {
+        console.error('Error fetching previous amounts:', error)
+        throw error
+      })
+  }
+
+  function fetchDebtHistory(id: string) {
+    return apiClient.get(`/debthistory/${id}`)
+      .then((response) => {
+        return response
+      })
+      .catch((error) => {
+        console.error('Error fetching debt history:', error)
+        throw error
+      })
+  }
+
+  function fetchPreviousPercentages(id: string) {
+    return apiClient.get(`/debtpreviouspercentage/${id}`)
+      .then((response) => {
+        return response     
+      })
+      .catch((error) => {
+        console.error('Error fetching previous percentages:', error)
+        throw error
+      })
+  }
+
+  function fetchCharges(id: string) {
+    return apiClient.get(`/debtinterestcharge/${id}`)
+      .then((response) => {
+        return response     
+      })
+      .catch((error) => {
+        console.error('Error fetching charges:', error)
+        throw error
+      })
+  }
+
   return {
     debts,
     fetchDebts,
     fetchDebtById,
     addDebt,
-    updateTodo,
-    deleteTodo,
+    updateDebt,
+    deleteDebt,
+    fetchPayments,
+    fetchDebtPreviousAmounts,
+    fetchDebtHistory,
+    fetchPreviousPercentages,
+    fetchCharges
   }
 })
