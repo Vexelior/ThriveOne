@@ -75,6 +75,20 @@ const updateDebt = async () => {
     }
 };
 
+const deleteDebt = async () => {
+    if (!confirm('Are you sure you want to delete this debt? This action cannot be undone.')) {
+        return;
+    }
+    try {
+        await store.deleteDebt(debtId.value);
+        success.value = 'Debt deleted successfully!';
+        resetForm();
+    } catch (err) {
+        error.value = 'Failed to delete debt. Please try again.';
+        console.error('Error deleting debt:', err);
+    }
+};
+
 const resetForm = () => {
     creditor.value = '';
     amount.value = 0;
@@ -215,9 +229,12 @@ const convertFileToBase64 = (file) => {
             <div class="mb-3">
                 <img v-if="image" :src="image" alt="Selected Image" class="img img-fluid" width="250px" />
             </div>
-            <div class="d-flex justify-content-start">
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                <router-link to="/debt" class="btn btn-secondary">Back</router-link>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <router-link to="/debt" class="btn btn-secondary">Back</router-link>
+                </div>
+                <button type="button" class="btn btn-danger ms-2" @click="deleteDebt">Delete</button>
             </div>
         </form>
     </div>
