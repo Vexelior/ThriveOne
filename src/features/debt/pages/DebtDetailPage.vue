@@ -2,7 +2,6 @@
 import { useDebtStore } from '@/features/debt/store/useDebtStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { Debt } from '@/features/debt/models/Debt';
 
 const route = useRoute();
 const store = useDebtStore();
