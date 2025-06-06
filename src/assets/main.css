@@ -84,6 +84,7 @@
 
 .nav-tabs .nav-link {
   color: var(--black);
+  border: 1px solid gray;
 }
 
 .nav-tabs .nav-link.active {
@@ -95,6 +96,7 @@
   background-color: var(--secondary);
   color: var(--quaternary);
   transition: background-color 0.3s ease;
+  border: 1px solid var(--primary);
 }
 
 .calendar {
