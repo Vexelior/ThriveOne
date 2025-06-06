@@ -4,6 +4,7 @@ import DashboardPage from '@/features/dashboard/pages/DashboardPage.vue';
 import DebtTrackerPage from '@/features/debt/pages/DebtTrackerPage.vue';
 import DebtAddPage from '@/features/debt/pages/DebtAddPage.vue';
 import DebtDetailPage from '@/features/debt/pages/DebtDetailPage.vue';
+import DebtEditPage from '@/features/debt/pages/DebtEditPage.vue';
 import WorkTasksPage from '@/features/work/pages/WorkTasksPage.vue';
 import TodoListPage from '@/features/todo/pages/TodoListPage.vue';
 
@@ -15,8 +16,9 @@ const routes = [
     children: [
       { path: '', component: DashboardPage },
       { path: '/debt', component: DebtTrackerPage },
-      { path: '/debt/add-debt', component: DebtAddPage },
+      { path: '/debt/add', component: DebtAddPage },
       { path: '/debt/:id', component: DebtDetailPage, props: true },
+      { path: '/debt/edit/:id', component: DebtEditPage, props: true },
       { path: '/todo', component: TodoListPage },
       { path: '/worktasks', component: WorkTasksPage },
     ],

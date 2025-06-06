@@ -90,7 +90,7 @@ const formattedPercentage = (percentage: number) => {
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
-                                            <router-link :to="`/edit-debt/${debt.id}`"
+                                            <router-link :to="`/debt/edit/${debt.id}`"
                                                 class="dropdown-item">Edit</router-link>
                                         </li>
                                         <li>
