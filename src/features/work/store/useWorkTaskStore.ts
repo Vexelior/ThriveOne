@@ -45,6 +45,12 @@ export const useWorkTaskStore = defineStore('WorkTask', () => {
 
   function updateWorkTask(id: string, worktask: WorkTask) {
     const updatedTask = apiClient.put(`/WorkTask/${id}`, worktask)
+      .then((response) => {
+        const index = workTasks.value.findIndex(t => t.id === id)
+        if (index !== -1) {
+          workTasks.value[index] = response as unknown as WorkTask
+        }
+      })
       .then(() => {
         fetchWorkTasks()
       })

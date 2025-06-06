@@ -4,7 +4,6 @@ import { onMounted, ref } from 'vue'
 import EditTaskModal from '../components/EditTaskModal.vue'
 import NewTaskModal from '../components/NewTaskModal.vue'
 import CalendarModal from '../components/CalendarModal.vue'
-import { updateCalendar } from '../components/CalendarModal.vue';
 import { WorkTask } from '../types/worktask';
 
 const store = useWorkTaskStore()
@@ -12,13 +11,15 @@ const store = useWorkTaskStore()
 const selectedTask = ref<WorkTask | null>(null);
 const alertMessage = ref('');
 const alertType = ref('');
+const calendarModalRef = ref();
 
 onMounted(() => {
     store.fetchWorkTasks()
-    updateCalendar();
+    calendarModalRef.value?.updateCalendar();
 });
 
 function handleSuccess(message: string) {
+    calendarModalRef.value?.updateCalendar();
     alertMessage.value = message;
     alertType.value = 'alert-success';
     store.fetchWorkTasks();
@@ -41,7 +42,7 @@ function handleError(message: string) {
 function handleTaskSelection(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const taskId = selectElement.value;
-    const foundTask =  store.workTasks.find(task => task.id === taskId);
+    const foundTask = store.workTasks.find(task => task.id === taskId);
     if (foundTask) {
         selectedTask.value = foundTask;
     } else {
@@ -53,7 +54,6 @@ function handleTaskSelection(event: Event) {
 <template>
     <div>
         <CalendarModal />
-        <NewTaskModal />
         <h1 class="display-4 text-center mt-3">Work Task Tracker</h1>
         <section class="container">
             <div class="row">
@@ -66,9 +66,10 @@ function handleTaskSelection(event: Event) {
             <div class="row">
                 <label for="task-list" class="form-label">Task List</label>
                 <div class="col d-flex justify-content-between align-items-center">
-                    <select class="form-select w-50" aria-label="Default select example" id="task-list" 
-                    @change="handleTaskSelection">
-                        <option value="">-- SELECT --</option>
+                    <select class="form-select w-50" aria-label="Default select example" id="task-list"
+                        @change="handleTaskSelection">
+                        <option value="" v-if="!selectedTask" selected disabled>-- SELECT --</option>
+                        <option value="" v-else>-- SELECT --</option>
                         <option v-for="task in store.workTasks" :key="task.id" :value="task.id">
                             {{ task.title }}
                         </option>

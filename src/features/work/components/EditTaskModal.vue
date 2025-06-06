@@ -84,7 +84,7 @@ function handleTaskEdit() {
         dueDate: taskDueDate.value,
         completedAt: taskCompletedDate.value,
         markdown: taskMarkdown.value,
-        html: new showdown.Converter().makeHtml(taskHtml.value)
+        html: new showdown.Converter().makeHtml(taskMarkdown.value)
     };
 
     store.updateWorkTask(updatedTask.id, updatedTask)
@@ -100,7 +100,6 @@ function handleTaskEdit() {
         store.workTasks = tasks;
     });
 
-    // Reset the form fields after editing
     taskId.value = '';
     taskTitle.value = '';
     taskDescription.value = '';
@@ -110,12 +109,13 @@ function handleTaskEdit() {
     taskCompletedDate.value = '';
     taskMarkdown.value = '';
     taskHtml.value = '';
-    emit('update:selectedTask', null);
+
     const modal = document.getElementById('edit-task-modal');
     if (modal) {
         const bootstrapModal = Modal.getInstance(modal) || new Modal(modal);
         bootstrapModal.hide();
     }
+    emit('update:selectedTask', null);
 }
 
 function handleTaskDelete() {
@@ -125,10 +125,33 @@ function handleTaskDelete() {
         .then(() => {
             emit('task-success', 'Task deleted successfully');
             emit('update:selectedTask', null);
+            // Select the first option in the select dropdown
+            const selectElement = document.getElementById('task-select') as HTMLSelectElement;
+            if (selectElement) {
+                selectElement.selectedIndex = 0;
+            }
         })
         .catch((error) => {
             emit('task-error', `Error deleting task: ${error.message}`);
         });
+    store.fetchWorkTasks().then(tasks => {
+        store.workTasks = tasks;
+    });
+    taskId.value = '';
+    taskTitle.value = '';
+    taskDescription.value = '';
+    taskPriority.value = 'Low';
+    taskStatus.value = 'Not Started';
+    taskDueDate.value = '';
+    taskCompletedDate.value = '';
+    taskMarkdown.value = '';
+    taskHtml.value = '';
+    const modal = document.getElementById('edit-task-modal');
+    if (modal) {
+        const bootstrapModal = Modal.getInstance(modal) || new Modal(modal);
+        bootstrapModal.hide();
+    }
+    emit('update:selectedTask', null);
 }
 </script>
 

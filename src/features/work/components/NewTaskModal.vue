@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, defineEmits } from 'vue'
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
 import showdown from 'showdown';
@@ -108,10 +108,10 @@ const defaultMarkdown = `
 --- 
 `;
 
-const emit = defineEmits([
-    'task-success',
-    'task-error',
-]);
+const emit = defineEmits<{
+    (e: 'task-success', message: string): void;
+    (e: 'task-error', message: string): void;
+}>();
 
 const taskTitle = ref('')
 const taskDescription = ref('')

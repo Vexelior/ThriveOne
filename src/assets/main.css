@@ -160,3 +160,24 @@
   color: var(--secondary);
   cursor: pointer;
 }
+
+.alert {
+  position: fixed !important;
+  top: 5% !important;
+  left: 50% !important;
+  transform: translate(-40%, -50%);
+  z-index: 99999 !important;
+  width: 68% !important;
+  margin: 0 auto !important;
+  opacity: 0.9 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+select {
+  border: 1px solid var(--primary) !important;
+}
+
+select:focus {
+  border-color: var(--secondary) !important;
+  box-shadow: 0 0 5px var(--secondary) !important;
+}

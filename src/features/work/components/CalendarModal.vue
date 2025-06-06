@@ -1,5 +1,5 @@
-<script>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
 
 const store = useWorkTaskStore();
@@ -7,15 +7,20 @@ const store = useWorkTaskStore();
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
+function handleModalShow() {
+    updateCalendar();
+}
+
 async function updateCalendar() {
+    console.log('Updating calendar...');
     initializeCalendar();
     renderCalendar();
 }
 
 function initializeCalendar() {
     renderMonths();
-    renderCalendar();
     setupYearNavigation();
+    renderCalendar();
 }
 
 function renderMonths() {
@@ -146,7 +151,21 @@ function updateTaskListSidebar(selectedDate) {
     }
 }
 
-export { updateCalendar };
+onMounted(() => {
+    const modal = document.getElementById('calendar-modal');
+    if (modal) {
+        modal.addEventListener('shown.bs.modal', handleModalShow);
+    }
+});
+
+onBeforeUnmount(() => {
+    const modal = document.getElementById('calendar-modal');
+    if (modal) {
+        modal.removeEventListener('shown.bs.modal', handleModalShow);
+    }
+});
+
+defineExpose({ updateCalendar });
 </script>
 
 <template>
