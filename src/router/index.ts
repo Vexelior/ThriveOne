@@ -7,6 +7,7 @@ import DebtDetailPage from '@/features/debt/pages/DebtDetailPage.vue';
 import DebtEditPage from '@/features/debt/pages/DebtEditPage.vue';
 import DebtAddPaymentPage from '@/features/debt/pages/DebtAddPaymentPage.vue';
 import DebtInterestCharge from '@/features/debt/pages/DebtAddInterestCharge.vue';
+import DebtSummaryPage from '@/features/debt/pages/DebtSummaryPage.vue';
 import WorkTasksPage from '@/features/work/pages/WorkTasksPage.vue';
 import TodoListPage from '@/features/todo/pages/TodoListPage.vue';
 
@@ -23,6 +24,7 @@ const routes = [
       { path: '/debt/edit/:id', component: DebtEditPage, props: true },
       { path: '/debt/payment/add/:id', component: DebtAddPaymentPage, props: true },
       { path: '/debt/interest-charge/add/:id', component: DebtInterestCharge, props: true },
+      { path: '/debt/summary', component: DebtSummaryPage },
       { path: '/todo', component: TodoListPage },
       { path: '/worktasks', component: WorkTasksPage },
     ],
