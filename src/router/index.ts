@@ -18,6 +18,8 @@ const routes = [
     component: DashboardLayout,
     children: [
       { path: '', component: DashboardPage },
+      { path: '/todo', component: TodoListPage },
+      { path: '/worktasks', component: WorkTasksPage },
       { path: '/debt', component: DebtTrackerPage },
       { path: '/debt/add', component: DebtAddPage },
       { path: '/debt/:id', component: DebtDetailPage, props: true },
@@ -25,8 +27,6 @@ const routes = [
       { path: '/debt/payment/add/:id', component: DebtAddPaymentPage, props: true },
       { path: '/debt/interest-charge/add/:id', component: DebtInterestCharge, props: true },
       { path: '/debt/summary', component: DebtSummaryPage },
-      { path: '/todo', component: TodoListPage },
-      { path: '/worktasks', component: WorkTasksPage },
     ],
   },
 ];

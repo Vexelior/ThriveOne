@@ -19,15 +19,14 @@ export const useDebtStore = defineStore('debt', () => {
       });
   }
   
-  function fetchDebtById(id: string) {
-    return apiClient.get(`/debt/${id}`)
-      .then((response) => {
-        return response
-      })
-      .catch((error) => {
-        console.error('Error fetching debt:', error)
-        throw error
-      })
+  async function fetchDebtById(id: string) {
+    try {
+      const response = await apiClient.get(`/debt/${id}`)
+      return response
+    } catch (error) {
+      console.error('Error fetching debt:', error)
+      throw error
+    }
   }
 
   function addDebt(debt: Debt) {

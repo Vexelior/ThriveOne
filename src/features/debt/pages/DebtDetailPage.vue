@@ -12,7 +12,6 @@ const debtId = computed(() => {
 const debt = ref(null);
 const payments = ref(null);
 const debtPreviousAmounts = ref(null);
-const debtHistory = ref(null);
 const previousPercentages = ref(null);
 const charges = ref(null);
 
@@ -20,7 +19,6 @@ onMounted(async () => {
     debt.value = await store.fetchDebtById(debtId.value);
     payments.value = await store.fetchPayments(debtId.value) ?? [];
     debtPreviousAmounts.value = await store.fetchDebtPreviousAmounts(debtId.value) ?? [];
-    debtHistory.value = await store.fetchDebtHistory(debtId.value) ?? [];
     previousPercentages.value = await store.fetchPreviousPercentages(debtId.value) ?? [];
     charges.value = await store.fetchCharges(debtId.value) ?? [];
 });
@@ -70,10 +68,6 @@ const formattedPercentage = (percentage: number) => {
                     data-bs-target="#previous-percentages" type="button" role="tab" aria-controls="previous-percentages"
                     aria-selected="false">Previous Percentages</button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button"
-                    role="tab" aria-controls="history" aria-selected="false">History</button>
-            </li>
         </ul>
         <div class="tab-content debt-list-container" id="debtTabsContent">
             <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
@@ -119,14 +113,9 @@ const formattedPercentage = (percentage: number) => {
                                     <div class="card-body">
                                         <div class="debt-detail d-flex align-items-center">
                                             <h5 class="card-title me-2">{{ debt.creditor }}</h5>
-                                            <span v-if="debt.percentageChange === 0" class="badge bg-secondary">{{
-                                                debt.percentageChange
-                                                }}%</span>
-                                            <span v-else-if="debt.percentageChange > 0" class="badge bg-danger">+{{
-                                                debt.percentageChange
-                                                }}%</span>
-                                            <span v-else class="badge bg-success">{{ debt.percentageChange
-                                                }}%</span>
+                                            <span v-if="debt.percentageChange === 0" class="badge bg-secondary">{{ debt.percentageChange.toFixed(2) }}%</span>
+                                            <span v-else-if="debt.percentageChange > 0" class="badge bg-danger">+{{ debt.percentageChange.toFixed(2) }}%</span>
+                                            <span v-else class="badge bg-success">{{ debt.percentageChange.toFixed(2) }}%</span>
                                         </div>
                                         <table class="table table-hover mt-3 debt-details-table">
                                             <tbody>
@@ -237,33 +226,6 @@ const formattedPercentage = (percentage: number) => {
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                <div class="row">
-                    <div class="col">
-                        <div v-if="debtHistory" class="card">
-                            <h1 class="card-header">History</h1>
-                            <div class="card-body">
-                                <div v-if="debtHistory.length === 0">
-                                    <span class="list-group-item">No history available.</span>
-                                </div>
-                                <div v-else>
-                                    <ul class="list-group scrollable-list">
-                                        <li v-for="history in debtHistory" :key="history._id" class="list-group-item">
-                                            <div class="d-flex justify-content-between">
-                                                <span>[{{ formattedDate(history.timestamp) }}] {{
-                                                    history.description }}</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <p>Loading debt history...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
                 <div class="row">
                     <div class="col">
@@ -280,8 +242,6 @@ const formattedPercentage = (percentage: number) => {
                                             <div class="d-flex justify-content-between">
                                                 <span>{{ formattedDate(payment.date) }}</span>
                                                 <span>{{ formattedAmount(payment.amount) }}</span>
-                                                <router-link :to="`/edit-payment/${payment.id || payment._id}`"
-                                                    class="btn btn-primary btn-sm">Edit</router-link>
                                             </div>
                                         </li>
                                     </ul>
@@ -346,8 +306,6 @@ const formattedPercentage = (percentage: number) => {
                                             <span>{{ formattedDate(charge.date) }}</span>
                                             <span>{{ charge.description }}</span>
                                             <span>{{ formattedAmount(charge.amount) }}</span>
-                                            <router-link :to="`/edit-interest-charge/${charge.id}`"
-                                                class="btn btn-primary btn-sm">Edit</router-link>
                                         </div>
                                     </li>
                                 </ul>
