@@ -97,7 +97,7 @@ const formatDate = (date) => {
             </div>
             <div v-for="todo in filteredTodos" :key="todo.id" class="col-md-4 todo-item">
                 <div class="card mb-4">
-                    <div class="card-body align-items-center pb-1">
+                    <div class="card-body pb-1">
                         <div v-if="todo.isEditing">
                             <input type="text" v-model="todo.title" class="form-control mb-2" />
                             <textarea v-model="todo.description" class="form-control mb-2"></textarea>
@@ -107,15 +107,12 @@ const formatDate = (date) => {
                         </div>
                         <div v-else>
                             <div class="d-flex align-items-center">
-                                <div class="d-flex ">
-                                    <input type="checkbox" :checked="todo.isCompleted"
-                                        @change="(event) => {
-                                            todo.isCompleted = event.target.checked;
-                                            saveTodo(todo);
-                                        }" />
-                                    <span class="ms-2">{{ todo.title }}</span>
-                                </div>
-                                <div class="dropdown float-end ms-auto">
+                                <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
+                                    todo.isCompleted = event.target.checked;
+                                    saveTodo(todo);
+                                }" />
+                                <span class="ms-2 w-100"><b>{{ todo.title }}</b></span>
+                                <div class="dropdown ms-auto text-end">
                                     <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
@@ -130,14 +127,12 @@ const formatDate = (date) => {
                                 </div>
                             </div>
                             <div class="mb-2">
-                                <div class="d-flex align-items-center">
-                                    <span v-if="todo.description" class="me-2 mb-2">{{ todo.description }}</span>
-                                    <span v-else class="me-2 mb-2">No description.</span>
-                                </div>
-                                <div class="d-flex align-items-center">
+                                <span v-if="todo.description" class="me-2 mb-2">{{ todo.description }}</span>
+                                <span v-else class="me-2 mb-2">No description.</span>
+                                <div>
                                     <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
                                 </div>
-                                <div v-if="todo.isCompleted" class="d-flex align-items-center">
+                                <div v-if="todo.isCompleted">
                                     <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed) }}</span>
                                 </div>
                             </div>

@@ -180,7 +180,7 @@ const formattedPercentage = (percentage: number) => {
                                 <div class="col-md-6">
                                     <div class="card-body">
                                         <img v-if="debt.image" :src="debt.imageSource" alt="Debt Image"
-                                            class="img img-fluid">
+                                            class="img img-fluid w-100 h-100">
                                         <div v-else class="text-center">
                                             <p>No image available.</p>
                                         </div>
