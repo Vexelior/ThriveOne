@@ -4,6 +4,7 @@ import { useWorkTaskStore } from '../store/useWorkTaskStore'
 import { WorkTask } from '../types/worktask';
 import showdown from 'showdown';
 import { Modal } from 'bootstrap';
+import { marked } from 'marked';
 
 const store = useWorkTaskStore();
 
@@ -84,7 +85,7 @@ function handleTaskEdit() {
         dueDate: taskDueDate.value,
         completedAt: taskCompletedDate.value,
         markdown: taskMarkdown.value,
-        html: new showdown.Converter().makeHtml(taskMarkdown.value)
+        html: marked(taskMarkdown.value)
     };
 
     store.updateWorkTask(updatedTask.id, updatedTask)

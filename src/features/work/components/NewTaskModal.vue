@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, defineEmits } from 'vue'
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
-import showdown from 'showdown';
+import { marked } from 'marked';
+
 
 const store = useWorkTaskStore()
 
@@ -138,7 +139,7 @@ const handleTaskPost = async () => {
         emit('task-error', 'Please fill in all fields')
         return
     }
-    
+
     const taskData = {
         title: taskTitle.value,
         description: taskDescription.value,
@@ -151,10 +152,9 @@ const handleTaskPost = async () => {
     if (taskCompletedDate.value !== null && taskCompletedDate.value !== '') {
         taskData.completedAt = taskCompletedDate.value;
     }
-    
-    const converter = new showdown.Converter()
-    const html = converter.makeHtml(taskMarkdown.value)
-    taskData.html = html
+
+    const html = marked.parse(taskMarkdown.value);
+    taskData.html = html;
     try {
         await store.addWorkTask(taskData)
         emit('task-success', 'Task created successfully!')
