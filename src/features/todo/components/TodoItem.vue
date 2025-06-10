@@ -19,6 +19,7 @@ const saveTodo = async (todo) => {
             description: todo.description,
             due: todo.due,
             isCompleted: todo.isCompleted,
+            completed: todo.isCompleted ? new Date().toISOString() : null
         });
         todo.isEditing = false;
     } catch (error) {

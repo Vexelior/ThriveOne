@@ -38,7 +38,9 @@ onMounted(async () => {
             debt.value.percentageChange = 0;
         } else {
             if (debt.value.percentageChange % 1 === 0) {
-                debt.value.percentageChange = debt.value.percentageChange / 1000000000000000;
+                debt.value.percentageChange = debt.value.percentageChange;
+            } else {
+                debt.value.percentageChange = parseFloat(debt.value.percentageChange.toFixed(2));
             }
         }
     } else {
@@ -64,7 +66,7 @@ const formattedPercentage = (percentage: number) => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container debt-detail">
         <router-link to="/debt" class="btn btn-secondary mt-3" title="Go Back">
             <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </router-link>

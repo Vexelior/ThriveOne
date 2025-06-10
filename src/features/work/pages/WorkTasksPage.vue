@@ -74,7 +74,7 @@ function handleTaskSelection(event: Event) {
                             {{ task.title }}
                         </option>
                     </select>
-                    <button type="button" class="btn btn-warning float-end" id="calendar-button" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-warning float-end text-light" id="calendar-button" data-bs-toggle="modal"
                         data-bs-target="#calendar-modal">
                         View Calendar
                     </button>

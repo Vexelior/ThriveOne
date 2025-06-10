@@ -29,9 +29,9 @@ const addInterestCharge = async () => {
 
 <template>
     <div class="container">
-        <h1 class="my-4">Submit Interest Charge</h1>
+        <h1 class="my-4">Submit Charge</h1>
         <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-        <form @submit.prevent="addInterestCharge">
+        <form @submit.prevent="addInterestCharge" class="debt-form">
             <div class="mb-3">
                 <label for="amount" class="form-label">Amount</label>
                 <input type="number" class="form-control" id="amount" step=".01" v-model="amount" required

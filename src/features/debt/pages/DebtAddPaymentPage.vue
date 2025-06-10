@@ -31,7 +31,7 @@ const addPayment = async () => {
     <div class="container">
         <h1 class="my-4">Submit Payment</h1>
         <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
-        <form @submit.prevent="addPayment">
+        <form @submit.prevent="addPayment" class="debt-form">
             <div class="mb-3">
                 <label for="amount" class="form-label">Amount</label>
                 <input type="number" class="form-control" id="amount" step=".01" v-model="amount" required

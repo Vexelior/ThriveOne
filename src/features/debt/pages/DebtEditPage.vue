@@ -171,7 +171,7 @@ const convertFileToBase64 = (file) => {
             {{ success }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <form @submit.prevent="updateDebt" class="add-debt-form">
+        <form @submit.prevent="updateDebt" class="debt-form">
             <div class="mb-3">
                 <label for="creditor" class="form-label">Creditor</label>
                 <input id="creditor" v-model="creditor" type="text" class="form-control" placeholder="Creditor"
