@@ -201,6 +201,11 @@ export const useDebtStore = defineStore('debt', () => {
       })
   }
 
+  function calculateProgressCompletionPercentage(debt: Debt): number {
+    if (debt.amount === 0) return 100;
+    return Math.min((1 - (debt.remainingAmount / debt.amount)) * 100, 100);
+  }
+
   return {
     debts,
     fetchDebts,
@@ -217,6 +222,7 @@ export const useDebtStore = defineStore('debt', () => {
     getAllImages,
     getImageByName,
     addPayment,
-    addInterestCharge
+    addInterestCharge,
+    calculateProgressCompletionPercentage
   }
 })

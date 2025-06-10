@@ -21,8 +21,22 @@ const pieChartData = computed(() => ({
         }
     ]
 }));
+const pieChartOptions = {
+    responsive: true,
+    plugins: {
+        legend: {
+            position: 'bottom'
+        }
+    }
+};
 onMounted(async () => {
-    progressCompletionPercentage.value = (debts.value.reduce((total, debt) => total + debt.remainingAmount, 0) / debts.value.reduce((total, debt) => total + debt.amount, 0)) * 100;
+    await store.fetchDebts();
+    const totalDebt = debts.value.reduce((total, debt) => total + debt.remainingAmount, 0);
+    const totalOriginal = debts.value.reduce((total, debt) => total + debt.amount, 0);
+    const totalPaid = totalOriginal - totalDebt;
+    const percentage = totalPaid / totalOriginal * 100;
+
+    progressCompletionPercentage.value = isNaN(percentage) ? 0 : percentage;
 });
 </script>
 <template>
@@ -44,8 +58,8 @@ onMounted(async () => {
         </div>
         <div class="row bg-light data-card">
             <div class="col-md-6">
-                <div class="card data-card">
-                    <Pie :data="pieChartData" :options="pieChartData" />
+                <div class="card data-card mb-2">
+                    <Pie :data="pieChartData" :options="pieChartOptions" />
                 </div>
             </div>
             <div class="col-md-6 mb-5">

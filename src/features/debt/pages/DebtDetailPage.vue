@@ -2,6 +2,7 @@
 import { useDebtStore } from '@/features/debt/store/useDebtStore';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { Modal } from 'bootstrap';
 
 const route = useRoute();
 const store = useDebtStore();
@@ -14,6 +15,7 @@ const payments = ref(null);
 const debtPreviousAmounts = ref(null);
 const previousPercentages = ref(null);
 const charges = ref(null);
+const progressCompletionPercentage = ref(0);
 
 onMounted(async () => {
     debt.value = await store.fetchDebtById(debtId.value);
@@ -21,7 +23,18 @@ onMounted(async () => {
     debtPreviousAmounts.value = await store.fetchDebtPreviousAmounts(debtId.value) ?? [];
     previousPercentages.value = await store.fetchPreviousPercentages(debtId.value) ?? [];
     charges.value = await store.fetchCharges(debtId.value) ?? [];
+
+    if (debt.value) {
+        progressCompletionPercentage.value = store.calculateProgressCompletionPercentage(debt.value);
+        if (progressCompletionPercentage.value >= 100) {
+            const paymentCompleteModal = new Modal(document.getElementById('paymentCompleteModal') as HTMLElement);
+            paymentCompleteModal.show();
+        }
+
+    }
 });
+
+
 
 const formattedDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -98,13 +111,19 @@ const formattedPercentage = (percentage: number) => {
                                     </ul>
                                 </div>
                                 <p class="text-muted mt-3">Progress:</p>
-                                <div class="progress w-100 mt-4 me-2" role="progressbar"
-                                    aria-label="Default striped example" aria-valuenow="0" aria-valuemin="0"
-                                    aria-valuemax="100">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated">
-                                        <span class="progressCompletionPercentage">
-                                            0%
-                                        </span>
+                                <div class="progress w-100 mt-4 me-2" role="progressbar" aria-label="Progress bar"
+                                    aria-valuenow="progressCompletionPercentage" aria-valuemin="0" aria-valuemax="100">
+                                    <div
+                                        class="progress-bar"
+                                        :class="{
+                                            'bg-success': progressCompletionPercentage >= 100,
+                                            'bg-danger': progressCompletionPercentage < 35,
+                                            'bg-warning': progressCompletionPercentage >= 35 && progressCompletionPercentage < 100,
+                                        }"
+                                        :style="{ width: progressCompletionPercentage + '%' }"
+                                        :aria-valuenow="progressCompletionPercentage"
+                                    >
+                                        {{ progressCompletionPercentage.toFixed(2) }}%
                                     </div>
                                 </div>
                             </div>
