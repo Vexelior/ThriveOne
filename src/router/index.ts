@@ -22,7 +22,7 @@ const routes = [
       { path: '/worktasks', component: WorkTasksPage },
       { path: '/debt', component: DebtTrackerPage },
       { path: '/debt/add', component: DebtAddPage },
-      { path: '/debt/:id', component: DebtDetailPage, props: true },
+      { path: '/debt/:id', component: DebtDetailPage },
       { path: '/debt/edit/:id', component: DebtEditPage, props: true },
       { path: '/debt/payment/add/:id', component: DebtAddPaymentPage, props: true },
       { path: '/debt/interest-charge/add/:id', component: DebtInterestCharge, props: true },

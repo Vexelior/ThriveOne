@@ -32,9 +32,21 @@ onMounted(async () => {
         }
 
     }
+
+    if (debt.value && debt.value.percentageChange !== null && debt.value.percentageChange !== undefined) {
+        console.log('Debt Percentage Change:', debt.value.percentageChange);
+        if (isNaN(debt.value.percentageChange)) {
+            debt.value.percentageChange = 0;
+        } else {
+            debt.value.percentageChange = parseFloat(debt.value.percentageChange.toFixed(2)); 
+            if (debt.value.percentageChange % 1 === 0) {
+                debt.value.percentageChange = debt.value.percentageChange / 1000000000000000;
+            }
+        }
+    } else {
+        debt.value.percentageChange = 0;
+    }
 });
-
-
 
 const formattedDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -113,16 +125,12 @@ const formattedPercentage = (percentage: number) => {
                                 <p class="text-muted mt-3">Progress:</p>
                                 <div class="progress w-100 mt-4 me-2" role="progressbar" aria-label="Progress bar"
                                     aria-valuenow="progressCompletionPercentage" aria-valuemin="0" aria-valuemax="100">
-                                    <div
-                                        class="progress-bar"
-                                        :class="{
-                                            'bg-success': progressCompletionPercentage >= 100,
-                                            'bg-danger': progressCompletionPercentage < 35,
-                                            'bg-warning': progressCompletionPercentage >= 35 && progressCompletionPercentage < 100,
-                                        }"
-                                        :style="{ width: progressCompletionPercentage + '%' }"
-                                        :aria-valuenow="progressCompletionPercentage"
-                                    >
+                                    <div class="progress-bar" :class="{
+                                        'bg-success': progressCompletionPercentage >= 100,
+                                        'bg-danger': progressCompletionPercentage < 35,
+                                        'bg-warning': progressCompletionPercentage >= 35 && progressCompletionPercentage < 100,
+                                    }" :style="{ width: progressCompletionPercentage + '%' }"
+                                        :aria-valuenow="progressCompletionPercentage">
                                         {{ progressCompletionPercentage.toFixed(2) }}%
                                     </div>
                                 </div>
@@ -132,9 +140,15 @@ const formattedPercentage = (percentage: number) => {
                                     <div class="card-body">
                                         <div class="debt-detail d-flex align-items-center">
                                             <h5 class="card-title me-2">{{ debt.creditor }}</h5>
-                                            <span v-if="debt.percentageChange === 0" class="badge bg-secondary">{{ debt.percentageChange.toFixed(2) }}%</span>
-                                            <span v-else-if="debt.percentageChange > 0" class="badge bg-danger">+{{ debt.percentageChange.toFixed(2) }}%</span>
-                                            <span v-else class="badge bg-success">{{ debt.percentageChange.toFixed(2) }}%</span>
+                                            <span
+                                                v-if="isNaN(debt.percentageChange) || debt.percentageChange === null || debt.percentageChange === undefined"
+                                                class="badge bg-secondary">N/A</span>
+                                            <span v-else-if="debt.percentageChange === 0" class="badge bg-secondary">{{
+                                                debt.percentageChange.toFixed(2) }}%</span>
+                                            <span v-else-if="debt.percentageChange > 0" class="badge bg-danger">+{{
+                                                debt.percentageChange.toFixed(2) }}%</span>
+                                            <span v-else-if="debt.percentageChange < 0" class="badge bg-success">{{
+                                                debt.percentageChange.toFixed(2) }}%</span>
                                         </div>
                                         <table class="table table-hover mt-3 debt-details-table">
                                             <tbody>
