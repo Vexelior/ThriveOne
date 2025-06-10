@@ -172,7 +172,6 @@ export const useDebtStore = defineStore('debt', () => {
       amount: amount,
       date: date
     }
-    console.log('Adding payment:', payment)
     return apiClient.post('/debtpayment', payment)
       .then((response) => {
         return response

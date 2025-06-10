@@ -34,11 +34,9 @@ onMounted(async () => {
     }
 
     if (debt.value && debt.value.percentageChange !== null && debt.value.percentageChange !== undefined) {
-        console.log('Debt Percentage Change:', debt.value.percentageChange);
         if (isNaN(debt.value.percentageChange)) {
             debt.value.percentageChange = 0;
         } else {
-            debt.value.percentageChange = parseFloat(debt.value.percentageChange.toFixed(2)); 
             if (debt.value.percentageChange % 1 === 0) {
                 debt.value.percentageChange = debt.value.percentageChange / 1000000000000000;
             }
