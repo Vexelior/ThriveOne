@@ -33,7 +33,7 @@ const greeting = computed(() => {
 const totalTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.length : 0);
 const completedTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => t.isCompleted).length : 0);
 const totalDebt = computed(() => Array.isArray(debtStore.debts) ? debtStore.debts.reduce((sum, d) => sum + d.remainingAmount, 0) : 0);
-const totalCompletedWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => t.completedAt !== '0001-01-01T00:00:00').length : 0);
+const totalCompletedWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => t.isCompleted).length : 0);
 const totalWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.length : 0);
 
 // Today’s Focus (example: first incomplete todo, next work task, next debt payment)
@@ -48,8 +48,23 @@ const todaysWorkTask = computed(() => {
     if (!Array.isArray(workTaskStore.workTasks)) return null;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return workTaskStore.workTasks.find(t => t.completedAt == '0001-01-01T00:00:00' && (new Date(t.dueDate).setHours(0, 0, 0, 0) <= today));
+    return workTaskStore.workTasks.find(t => !t.isCompleted && (new Date(t.dueDate).setHours(0, 0, 0, 0) == today));
 });
+
+// This week’s Focus (example: first incomplete todo, next work task, next debt payment)
+const thisWeeksTodo = computed(() => {
+    if (!Array.isArray(todoStore.todos)) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return todoStore.todos.filter(t => !t.isCompleted && (!t.due || (new Date(t.due).setHours(0, 0, 0, 0) > today && new Date(t.due).setHours(0, 0, 0, 0) <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000))));
+});
+const upcomingWorkTasks = computed(() => {
+    if (!Array.isArray(workTaskStore.workTasks)) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return workTaskStore.workTasks.find(t => !t.isCompleted && (new Date(t.dueDate).setHours(0, 0, 0, 0) == today || new Date(t.dueDate).setHours(0, 0, 0, 0) > today && new Date(t.dueDate).setHours(0, 0, 0, 0) <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)));
+});
+
 // Motivational Section
 const motivationalQuotes = [
     "The journey of a thousand miles begins with one step.",
@@ -75,7 +90,7 @@ const quoteOfTheDay = computed(() => motivationalQuotes[new Date().getDate() % m
 
 // Alerts & Reminders (example: overdue todos or payments)
 const overdueTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => !t.isCompleted && t.due && new Date(t.due).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : []);
-const overdueWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.dueDate) <= new Date() && new Date(t.completedAt) > new Date()) : []);
+const overdueWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.dueDate).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0) && !t.isCompleted) : []);
 const totalOverdue = computed(() => overdueTodos.value.length + overdueWorkTasks.value.length);
 
 // Recent Activity Feed (example: last 5 completed todos or payments)
@@ -127,22 +142,6 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
             <h2 class="fw-bold greeting">{{ greeting }}</h2>
         </div>
 
-        <!-- Alerts & Reminders -->
-        <div v-if="showAlert && ((overdueTodos && overdueTodos.length) || (overdueWorkTasks && overdueWorkTasks.length))"
-            class="alert alert-warning d-flex align-items-center gap-3 alert-dismissible fade show mb-4" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            <ul class="list-unstyled mb-0">
-                <li v-if="overdueTodos && overdueTodos.length">
-                    <FontAwesomeIcon :icon="['fas', 'triangle-exclamation']" class="me-2 text-warning" />
-                    You have <b>{{ overdueTodos.length }}</b> overdue todo(s)!
-                </li>
-                <li v-if="overdueWorkTasks && overdueWorkTasks.length">
-                    <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
-                    You have <b>{{ overdueWorkTasks.length }}</b> overdue work task(s)!
-                </li>
-            </ul>
-        </div>
-
         <!-- Motivational Section -->
         <blockquote class="blockquote text-center my-4">
             <p class="mb-0 fst-italic">{{ quoteOfTheDay }}</p>
@@ -182,19 +181,36 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
         <div class="todays-focus mb-4">
             <h3 class="mb-3">Today's Focus</h3>
             <ul class="list-group">
-            <li v-for="todo in (Array.isArray(todaysTodo) ? todaysTodo : (todaysTodo ? [todaysTodo] : []))"
-                :key="'todays-todo-' + todo.id" class="list-group-item">
-                <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
-                Todo: <b>{{ todo.title }}</b>
-            </li>
-            <li v-for="task in (Array.isArray(todaysWorkTask) ? todaysWorkTask : (todaysWorkTask ? [todaysWorkTask] : []))"
-                :key="'todays-worktask-' + task.id" class="list-group-item">
-                <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
-                Work Task: <b>{{ task.title }}</b>
-            </li>
-            <li v-if="(!todaysTodo || (Array.isArray(todaysTodo) && !todaysTodo.length)) && (!todaysWorkTask || (Array.isArray(todaysWorkTask) && !todaysWorkTask.length))" class="list-group-item text-muted">
-                All caught up for today!
-            </li>
+                <li v-for="todo in (Array.isArray(todaysTodo) ? todaysTodo : (todaysTodo ? [todaysTodo] : []))"
+                    :key="'todays-todo-' + todo.id" class="list-group-item">
+                    <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
+                    Todo: <b>{{ todo.title }}</b>
+                </li>
+                <li v-for="task in (Array.isArray(todaysWorkTask) ? todaysWorkTask : (todaysWorkTask ? [todaysWorkTask] : []))"
+                    :key="'todays-worktask-' + task.id" class="list-group-item">
+                    <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
+                    Work Task: <b>{{ task.title }}</b>
+                </li>
+                <li v-if="(!todaysTodo || (Array.isArray(todaysTodo) && !todaysTodo.length)) && (!todaysWorkTask || (Array.isArray(todaysWorkTask) && !todaysWorkTask.length))"
+                    class="list-group-item text-muted">
+                    All caught up for today!
+                </li>
+            </ul>
+        </div>
+
+        <!-- This Week’s Focus -->
+        <div class="this-week-focus mb-4">
+            <h3 class="mb-3">This Week's Focus</h3>
+            <ul class="list-group">
+                <li v-for="todo in (Array.isArray(thisWeeksTodo) ? thisWeeksTodo : (thisWeeksTodo ? [thisWeeksTodo] : []))"
+                    :key="'thisweek-todo-' + todo.id" class="list-group-item">
+                    <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
+                </li>
+                <li v-for="task in (Array.isArray(upcomingWorkTasks) ? upcomingWorkTasks : (upcomingWorkTasks ? [upcomingWorkTasks] : []))"
+                    :key="'thisweek-worktask-' + task.id" class="list-group-item">
+                    <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
+                    Work Task: <b>{{ task.title }}</b>
+                </li>
             </ul>
         </div>
 

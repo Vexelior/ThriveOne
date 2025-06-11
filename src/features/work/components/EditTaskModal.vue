@@ -85,7 +85,8 @@ function handleTaskEdit() {
         dueDate: taskDueDate.value,
         completedAt: taskCompletedDate.value,
         markdown: taskMarkdown.value,
-        html: marked(taskMarkdown.value)
+        html: marked(taskMarkdown.value),
+        isCompleted: taskStatus.value === 'Completed'
     };
 
     store.updateWorkTask(updatedTask.id, updatedTask)

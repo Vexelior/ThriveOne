@@ -8,4 +8,5 @@ export interface WorkTask {
     status: string;
     markdown: string;
     html: string;
+    isCompleted: boolean;
 }
