@@ -301,3 +301,35 @@ select:focus {
   background-color: var(--quaternary) !important;
   border-radius: 10px !important;
 }
+
+.dashboard {
+  background-color: var(--quaternary) !important;
+  padding: 2rem !important;
+  border-radius: 10px !important;
+}
+
+.dashboard h1 {
+  color: var(--primary) !important;
+  margin-bottom: 1rem !important;
+}
+
+.dashboard .card {
+  border: 1px solid var(--primary) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.text-bg-primary {
+  background-color: var(--primary) !important;
+  color: var(--quaternary) !important;
+}
+
+.text-bg-secondary {
+  background-color: var(--secondary) !important;
+  color: var(--quaternary) !important;
+}
+
+.text-bg-tertiary {
+  background-color: var(--dimgray) !important;
+  color: var(--quaternary) !important;
+}
+
