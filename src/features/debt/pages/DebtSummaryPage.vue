@@ -40,7 +40,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-    <div class="container">
+    <div class="container py-4">
         <h1 class="my-4">Summary</h1>
         <div class="row bg-light data-card" style="border-radius: 10px;">
             <div class="col-md-12 py-3">

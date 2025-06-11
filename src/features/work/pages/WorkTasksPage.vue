@@ -54,8 +54,8 @@ function handleTaskSelection(event: Event) {
 <template>
     <div>
         <CalendarModal />
-        <h1 class="display-4 text-center mt-3">Work Task Tracker</h1>
-        <section class="container">
+        <section class="container py-4">
+            <h1 class="my-4">Work Task Tracker</h1>
             <div class="row">
                 <div id="alert-container">
                     <div v-if="alertMessage" :class="`alert ${alertType}`" role="alert">

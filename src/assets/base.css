@@ -24,6 +24,11 @@
     --warning: #ffbf00;
 }
 
+html {
+    scroll-behavior: smooth;
+    background-color: var(--tertiary);
+}
+
 h1,
 h2,
 h3,

@@ -13,13 +13,13 @@ function closeSidebar() {
 </script>
 
 <template>
-    <!-- Mobile Hamburger Button -->
-    <button class="btn btn-primary d-md-none m-2 sidebar-toggle-button" type="button" @click="openSidebar" aria-label="Open sidebar">
-        <font-awesome-icon :icon="['fas', 'bars']" />
-    </button>
-
     <!-- Desktop Sidebar -->
     <div class="container-fluid">
+        <!-- Mobile Hamburger Button -->
+        <button class="btn btn-primary d-md-none m-2 sidebar-toggle-button" type="button" @click="openSidebar"
+            aria-label="Open sidebar">
+            <font-awesome-icon :icon="['fas', 'bars']" />
+        </button>
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar d-none d-md-block">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100 w-100">
                 <h1 class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">

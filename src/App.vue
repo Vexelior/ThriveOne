@@ -4,8 +4,8 @@ import SidebarNav from './components/layout/SidebarNav.vue';
 </script>
 
 <template>
-    <SidebarNav />
     <div class="content-wrapper">
+        <SidebarNav />
         <DashboardLayout />
     </div>
 </template>

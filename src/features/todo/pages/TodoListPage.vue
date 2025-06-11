@@ -12,8 +12,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <div>
-        <h1 class="display-4 text-center mt-3">Todo</h1>
+    <div class="container py-4">
+        <h1 class="my-4">Todo</h1>
         <TodoInput />
         <TodoItem :todos="store.todos" />
     </div>

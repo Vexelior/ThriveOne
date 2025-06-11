@@ -30,14 +30,14 @@ const greeting = computed(() => {
 });
 
 // Quick Stats
-const totalTodos = computed(() => todoStore.todos?.length ?? 0);
-const completedTodos = computed(() => todoStore.todos?.filter(t => t.isCompleted).length ?? 0);
-const totalDebt = computed(() => debtStore.debts?.reduce((sum, d) => sum + d.remainingAmount, 0) ?? 0);
-const totalWorkTasks = computed(() => workTaskStore.workTasks?.length ?? 0);
+const totalTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.length : 0);
+const completedTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => t.isCompleted).length : 0);
+const totalDebt = computed(() => Array.isArray(debtStore.debts) ? debtStore.debts.reduce((sum, d) => sum + d.remainingAmount, 0) : 0);
+const totalWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.length : 0);
 
 // Today’s Focus (example: first incomplete todo, next work task, next debt payment)
-const todaysTodo = computed(() => todoStore.todos?.find(t => !t.isCompleted && new Date(t.due) <= new Date()) ?? null);
-const todaysWorkTask = computed(() => workTaskStore.workTasks?.find(t => !t.dueDate || new Date(t.dueDate) <= new Date()) ?? null);
+const todaysTodo = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.find(t => !t.isCompleted && (!t.due || new Date(t.due) <= new Date())) ?? null : null);
+const todaysWorkTask = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.find(t => !t.completedAt && (!t.dueDate || new Date(t.dueDate) <= new Date())) ?? null : null);
 
 // Motivational Section
 const motivationalQuotes = [
@@ -63,18 +63,17 @@ const motivationalQuotes = [
 const quoteOfTheDay = computed(() => motivationalQuotes[new Date().getDate() % motivationalQuotes.length]);
 
 // Alerts & Reminders (example: overdue todos or payments)
-const overdueTodos = computed(() => todoStore.todos?.filter(t => !t.isCompleted && new Date(t.due) < new Date()) ?? []);
-const overdueWorkTasks = computed(() => workTaskStore.workTasks?.filter(t => new Date(t.dueDate) <= new Date() && new Date(t.completedAt) > new Date()) ?? []);
+const overdueTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => !t.isCompleted && new Date(t.due) < new Date()) : []);
+const overdueWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.dueDate) <= new Date() && new Date(t.completedAt) > new Date()) : []);
 const totalOverdue = computed(() => overdueTodos.value.length + overdueWorkTasks.value.length);
 
 // Recent Activity Feed (example: last 5 completed todos or payments)
-const recentTodos = computed(() => todoStore.todos?.filter(t => t.isCompleted && new Date(t.completed) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).slice(-5) ?? []);
-const recentWorkTasks = computed(() => workTaskStore.workTasks?.filter(t => new Date(t.completedAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).slice(-5) ?? []);
+const recentTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => t.isCompleted && new Date(t.completed) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).slice(-5) : []);
+const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.completedAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).slice(-5) : []);
 </script>
 
 <template>
     <div class="dashboard container py-4">
-        
         <!-- Notification Bell -->
         <div class="position-absolute top-0 end-0 mt-3 me-3" style="z-index: 10;">
             <div class="dropdown notification-dropdown">
@@ -93,13 +92,14 @@ const recentWorkTasks = computed(() => workTaskStore.workTasks?.filter(t => new 
                         No overdue items 🎉
                     </li>
                     <template v-else>
-                        <li v-if="overdueTodos.length" class="dropdown-header">Overdue Todos</li>
+                        <li v-if="overdueTodos && overdueTodos.length" class="dropdown-header">Overdue Todos</li>
                         <li v-for="todo in overdueTodos" :key="'overdue-todo-' + todo.id"
                             class="dropdown-item d-flex align-items-center">
                             <FontAwesomeIcon :icon="['fas', 'triangle-exclamation']" class="me-2 text-warning" />
                             <span>{{ todo.title }}</span>
                         </li>
-                        <li v-if="overdueWorkTasks.length" class="dropdown-header text-danger mt-2">Overdue Work Tasks
+                        <li v-if="overdueWorkTasks && overdueWorkTasks.length" class="dropdown-header text-danger mt-2">
+                            Overdue Work Tasks
                         </li>
                         <li v-for="task in overdueWorkTasks" :key="'overdue-task-' + task.id"
                             class="dropdown-item d-flex align-items-center">
@@ -117,15 +117,15 @@ const recentWorkTasks = computed(() => workTaskStore.workTasks?.filter(t => new 
         </div>
 
         <!-- Alerts & Reminders -->
-        <div v-if="showAlert && (overdueTodos.length || overdueWorkTasks.length)"
+        <div v-if="showAlert && ((overdueTodos && overdueTodos.length) || (overdueWorkTasks && overdueWorkTasks.length))"
             class="alert alert-warning d-flex align-items-center gap-3 alert-dismissible fade show mb-4" role="alert">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <ul class="list-unstyled mb-0">
-                <li v-if="overdueTodos.length">
+                <li v-if="overdueTodos && overdueTodos.length">
                     <FontAwesomeIcon :icon="['fas', 'triangle-exclamation']" class="me-2 text-warning" />
                     You have <b>{{ overdueTodos.length }}</b> overdue todo(s)!
                 </li>
-                <li v-if="overdueWorkTasks.length">
+                <li v-if="overdueWorkTasks && overdueWorkTasks.length">
                     <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
                     You have <b>{{ overdueWorkTasks.length }}</b> overdue work task(s)!
                 </li>

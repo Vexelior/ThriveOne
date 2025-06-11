@@ -74,67 +74,70 @@ const formatDate = (date) => {
             </div>
         </div>
         <div class="row todo-items">
-            <div v-if="isLoading" class="text-center mt-5">
-                <font-awesome-icon :icon="['fas', 'spinner']" spin />
-            </div>
-            <div v-else>
-                <ul class="nav nav-tabs mb-3">
-                    <li class="nav-item">
-                        <button class="nav-link" :class="{ active: !store.showCompleted }"
-                            @click="store.showCompleted = false">
-                            Active
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" :class="{ active: store.showCompleted }"
-                            @click="store.showCompleted = true">
-                            Completed
-                        </button>
-                    </li>
-                </ul>
-                <span v-if="filteredTodos.length === 0" class="d-flex justify-content-center align-items-center mt-5">
-                    No todos found. <font-awesome-icon :icon="['fas', 'frown']" class="ms-2 text-danger" />
-                </span>
-            </div>
-            <div v-for="todo in filteredTodos" :key="todo.id" class="col-md-4 todo-item">
-                <div class="card mb-4">
-                    <div class="card-body pb-1">
-                        <div v-if="todo.isEditing">
-                            <input type="text" v-model="todo.title" class="form-control mb-2" />
-                            <textarea v-model="todo.description" class="form-control mb-2"></textarea>
-                            <input type="date" v-model="todo.due" class="form-control mb-2" />
-                            <button class="btn btn-success me-2" @click="saveTodo(todo)">Save</button>
-                            <button class="btn btn-secondary" @click="cancelEdit(todo, { ...todo })">Cancel</button>
-                        </div>
-                        <div v-else>
-                            <div class="d-flex align-items-center">
-                                <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
-                                    todo.isCompleted = event.target.checked;
-                                    saveTodo(todo);
-                                }" />
-                                <span class="ms-2 w-100"><b>{{ todo.title }}</b></span>
-                                <div class="dropdown ms-auto text-end">
-                                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <a class="dropdown-item" @click="() => { todo.isEditing = true; }">
-                                            Edit
-                                        </a>
-                                        <li><a class="dropdown-item text-danger" @click="deleteTodo(todo.id)">Delete</a>
-                                        </li>
-                                    </ul>
-                                </div>
+            <ul class="nav nav-tabs mb-3 justify-content-start">
+                <li class="nav-item">
+                    <button class="nav-link" :class="{ active: !store.showCompleted }"
+                        @click="store.showCompleted = false">
+                        Active
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" :class="{ active: store.showCompleted }"
+                        @click="store.showCompleted = true">
+                        Completed
+                    </button>
+                </li>
+            </ul>
+            <span v-if="filteredTodos.length === 0" class="d-flex justify-content-center align-items-center mt-5">
+                No todos found. <font-awesome-icon :icon="['fas', 'frown']" class="ms-2 text-danger" />
+            </span>
+            <div class="row g-3">
+                <div v-for="todo in filteredTodos" :key="todo.id" class="col-12 col-md-6 col-lg-4">
+                    <div class="card mb-3 todo-card h-100 shadow-sm">
+                        <div class="card-body pb-1">
+                            <div v-if="todo.isEditing">
+                                <input type="text" v-model="todo.title" class="form-control mb-2" />
+                                <textarea v-model="todo.description" class="form-control mb-2"></textarea>
+                                <input type="date" v-model="todo.due" class="form-control mb-2" />
+                                <button class="btn btn-success me-2" @click="saveTodo(todo)">Save</button>
+                                <button class="btn btn-secondary" @click="cancelEdit(todo, { ...todo })">Cancel</button>
                             </div>
-                            <div class="mb-2">
-                                <span v-if="todo.description" class="me-2 mb-2">{{ todo.description }}</span>
-                                <span v-else class="me-2 mb-2">No description.</span>
-                                <div>
-                                    <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
+                            <div v-else>
+                                <div class="d-flex align-items-center mb-2">
+                                    <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
+                                        todo.isCompleted = event.target.checked;
+                                        saveTodo(todo);
+                                    }" />
+                                    <span class="ms-2 w-100"
+                                        :class="{ 'text-decoration-line-through text-muted': todo.isCompleted }">
+                                        <b>{{ todo.title }}</b>
+                                    </span>
+                                    <div class="dropdown ms-auto text-end">
+                                        <button class="btn btn-sm dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <a class="dropdown-item" @click="() => { todo.isEditing = true; }">
+                                                Edit
+                                            </a>
+                                            <li>
+                                                <a class="dropdown-item text-danger" @click="deleteTodo(todo.id)">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div v-if="todo.isCompleted">
-                                    <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed) }}</span>
+                                <div class="mb-2 small">
+                                    <span v-if="todo.description" class="me-2 mb-2">{{ todo.description }}</span>
+                                    <span v-else class="me-2 mb-2 text-muted">No description.</span>
+                                    <div>
+                                        <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
+                                    </div>
+                                    <div v-if="todo.isCompleted">
+                                        <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed) }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
