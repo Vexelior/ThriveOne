@@ -74,8 +74,8 @@ function handleTaskSelection(event: Event) {
                             {{ task.title }}
                         </option>
                     </select>
-                    <button type="button" class="btn btn-warning float-end text-light" id="calendar-button" data-bs-toggle="modal"
-                        data-bs-target="#calendar-modal">
+                    <button type="button" class="btn btn-warning float-end text-light" id="calendar-button"
+                        data-bs-toggle="modal" data-bs-target="#calendar-modal">
                         View Calendar
                     </button>
                 </div>
@@ -126,7 +126,7 @@ function handleTaskSelection(event: Event) {
             <div class="row">
                 <div class="col-lg-12">
                     <div v-if="selectedTask" class="markdown-body card" id="task-html">
-                        <div class="card-body">
+                        <div class="card-body ps-4 pe-4 pt-0 pb-0">
                             <div v-html="selectedTask.html"></div>
                         </div>
                     </div>
