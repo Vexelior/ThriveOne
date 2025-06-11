@@ -221,7 +221,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
         </div>
 
         <!-- Recent Activity Feed -->
-        <div class="recent-activity">
+        <div v-if="recentTodos && recentWorkTasks && (recentTodos.length > 0 || recentWorkTasks.length > 0)" class="recent-activity mb-4">
             <h3 class="mb-3">Recent Activity</h3>
             <ul class="list-group">
                 <li v-for="todo in recentTodos" :key="'todo-' + todo.id" class="list-group-item">
