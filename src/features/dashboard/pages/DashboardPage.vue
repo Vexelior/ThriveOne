@@ -188,7 +188,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
         </div>
 
         <!-- Today’s Focus -->
-        <div class="todays-focus mb-4">
+        <div v-if="todaysTodo && todaysTodo.length > 0" class="todays-focus mb-4">
             <h3 class="mb-3">Today's Focus</h3>
             <ul class="list-group">
                 <li v-for="todo in (Array.isArray(todaysTodo) ? todaysTodo : (todaysTodo ? [todaysTodo] : []))"
@@ -209,7 +209,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
         </div>
 
         <!-- This Week’s Focus -->
-        <div class="this-week-focus mb-4">
+        <div v-if="upcomingWorkTasks && upcomingWorkTasks.length > 0" class="this-week-focus mb-4">
             <h3 class="mb-3">This Week's Focus</h3>
             <ul class="list-group">
                 <li v-for="task in (Array.isArray(upcomingWorkTasks) ? upcomingWorkTasks : (upcomingWorkTasks ? [upcomingWorkTasks] : []))"
