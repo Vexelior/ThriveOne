@@ -69,7 +69,6 @@
 }
 
 .content-wrapper {
-  margin-left: 250px;
   background-color: var(--quaternary);
   color: var(--black);
   padding: 2rem;
@@ -333,3 +332,158 @@ select:focus {
   color: var(--quaternary) !important;
 }
 
+.sidebar {
+  min-height: 100vh;
+}
+
+.offcanvas {
+  transition: visibility 0s, transform 0.3s ease-in-out;
+}
+
+.offcanvas ul li {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: larger;
+}
+
+.sidebar-close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+.sidebar-close-btn:hover {
+  color: #ccc;
+}
+
+.sidebar-toggle-button {
+  position: block;
+  display: block;
+  top: 2rem;
+  left: 1rem;
+  z-index: 1000;
+  background-color: var(--primary);
+  color: var(--quaternary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.sidebar-toggle-button:hover {
+  background-color: var(--secondary);
+  color: var(--quaternary);
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px var(--secondary);
+}
+
+.content-wrapper {
+  margin-left: 250px;
+  /* Adjust based on sidebar width */
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+.notification-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-dropdown {
+  background-color: var(--primary) !important;
+  color: var(--quaternary) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+button.notification-icon {
+  cursor: pointer;
+  color: var(--quaternary);
+  outline: none !important;
+  background: transparent;
+  border: none;
+}
+
+button.notification-icon:focus {
+  outline: none !important;
+  box-shadow: 0 0 5px var(--secondary) !important;
+}
+
+button.notification-icon:active {
+  outline: none !important;
+  box-shadow: 0 0 5px var(--secondary) !important;
+}
+
+.notification-dropdown .dropdown-menu .dropdown-header {
+  background-color: var(--primary);
+  color: var(--quaternary);
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+}
+
+.notification-dropdown .dropdown-menu .dropdown-item {
+  color: var(--quaternary) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.scrollable-months {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar-toggle-button {
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+
+  .sidebar h1 {
+    font-size: 1.5rem;
+    text-align: center !important;
+  }
+
+  .content-wrapper {
+    margin-left: 0 !important;
+  }
+
+  .greeting {
+    text-align: center !important;
+  }
+
+  .alert {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 1rem !important;
+  }
+
+  .debt-tabs .nav-tabs {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .debt-tabs .nav-tabs .nav-item {
+    flex: 0 0 auto;
+  }
+
+  .scrollable-months {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .scrollable-months .each-month {
+    display: inline-block;
+    min-width: 90px;
+    text-align: center;
+  }
+}

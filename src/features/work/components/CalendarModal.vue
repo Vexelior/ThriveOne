@@ -193,7 +193,7 @@ defineExpose({ updateCalendar });
                                     <font-awesome-icon class="triangle-left" :icon="['fas', 'angle-left']" />
                                     <font-awesome-icon class="triangle-right" :icon="['fas', 'angle-right']" />
                                 </div>
-                                <div class="months"></div>
+                                <div class="months scrollable-months"></div>
                                 <hr class="month-line" />
                                 <table class="calendar-table" id="calendar">
                                     <thead class="text-center">

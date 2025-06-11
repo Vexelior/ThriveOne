@@ -70,30 +70,32 @@ const formattedPercentage = (percentage: number) => {
         <router-link to="/debt" class="btn btn-secondary mt-3" title="Go Back">
             <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </router-link>
-        <ul class="nav nav-tabs mt-3" id="debtTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
-                    type="button" role="tab" aria-controls="details" aria-selected="true">Details</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button"
-                    role="tab" aria-controls="payments" aria-selected="true">Payments</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="charges-tab" data-bs-toggle="tab" data-bs-target="#charges" type="button"
-                    role="tab" aria-controls="charges" aria-selected="true">Charges</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="previous-amounts-tab" data-bs-toggle="tab"
-                    data-bs-target="#previous-amounts" type="button" role="tab" aria-controls="previous-amounts"
-                    aria-selected="false">Previous Amounts</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="previous-percentages-tab" data-bs-toggle="tab"
-                    data-bs-target="#previous-percentages" type="button" role="tab" aria-controls="previous-percentages"
-                    aria-selected="false">Previous Percentages</button>
-            </li>
-        </ul>
+        <div class="overflow-auto debt-tabs" style="white-space: nowrap;">
+            <ul class="nav nav-tabs mt-3" id="debtTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
+                        type="button" role="tab" aria-controls="details" aria-selected="true">Details</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments"
+                        type="button" role="tab" aria-controls="payments" aria-selected="true">Payments</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="charges-tab" data-bs-toggle="tab" data-bs-target="#charges"
+                        type="button" role="tab" aria-controls="charges" aria-selected="true">Charges</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="previous-amounts-tab" data-bs-toggle="tab"
+                        data-bs-target="#previous-amounts" type="button" role="tab" aria-controls="previous-amounts"
+                        aria-selected="false">Previous Amounts</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="previous-percentages-tab" data-bs-toggle="tab"
+                        data-bs-target="#previous-percentages" type="button" role="tab"
+                        aria-controls="previous-percentages" aria-selected="false">Previous Percentages</button>
+                </li>
+            </ul>
+        </div>
         <div class="tab-content debt-list-container" id="debtTabsContent">
             <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                 <div class="row">
