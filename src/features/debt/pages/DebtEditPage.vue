@@ -90,6 +90,7 @@ const deleteDebt = async () => {
         await store.deleteDebt(debtId.value);
         success.value = 'Debt deleted successfully!';
         resetForm();
+        router.push('/debt');
     } catch (err) {
         error.value = 'Failed to delete debt. Please try again.';
         console.error('Error deleting debt:', err);
