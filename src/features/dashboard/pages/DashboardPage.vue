@@ -59,10 +59,20 @@ const thisWeeksTodo = computed(() => {
     return todoStore.todos.filter(t => !t.isCompleted && (!t.due || (new Date(t.due).setHours(0, 0, 0, 0) > today && new Date(t.due).setHours(0, 0, 0, 0) <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000))));
 });
 const upcomingWorkTasks = computed(() => {
-    if (!Array.isArray(workTaskStore.workTasks)) return null;
+    if (!Array.isArray(workTaskStore.workTasks)) return [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return workTaskStore.workTasks.find(t => !t.isCompleted && (new Date(t.dueDate).setHours(0, 0, 0, 0) == today || new Date(t.dueDate).setHours(0, 0, 0, 0) > today && new Date(t.dueDate).setHours(0, 0, 0, 0) <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)));
+    const weekFromToday = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    weekFromToday.setHours(0, 0, 0, 0);
+    return workTaskStore.workTasks.filter(t =>
+        !t.isCompleted &&
+        t.dueDate &&
+        (() => {
+            const due = new Date(t.dueDate);
+            due.setHours(0, 0, 0, 0);
+            return due >= today && due <= weekFromToday;
+        })()
+    );
 });
 
 // Motivational Section
@@ -202,10 +212,6 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
         <div class="this-week-focus mb-4">
             <h3 class="mb-3">This Week's Focus</h3>
             <ul class="list-group">
-                <li v-for="todo in (Array.isArray(thisWeeksTodo) ? thisWeeksTodo : (thisWeeksTodo ? [thisWeeksTodo] : []))"
-                    :key="'thisweek-todo-' + todo.id" class="list-group-item">
-                    <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
-                </li>
                 <li v-for="task in (Array.isArray(upcomingWorkTasks) ? upcomingWorkTasks : (upcomingWorkTasks ? [upcomingWorkTasks] : []))"
                     :key="'thisweek-worktask-' + task.id" class="list-group-item">
                     <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />

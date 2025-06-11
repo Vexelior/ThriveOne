@@ -147,6 +147,7 @@ const handleTaskPost = async () => {
         status: taskStatus.value,
         dueDate: taskDueDate.value,
         markdown: taskMarkdown.value,
+        isCompleted: taskStatus.value === 'Completed',
     }
 
     if (taskCompletedDate.value !== null && taskCompletedDate.value !== '') {
