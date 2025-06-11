@@ -8,7 +8,17 @@ Chart.register(ArcElement, Tooltip, Legend);
 const store = useDebtStore();
 const router = useRouter();
 const debts = computed(() => store.debts);
-const progressCompletionPercentage = ref(0);
+const progressCompletionPercentage = computed(() => {
+    const { totalDebt, totalOriginal } = debts.value.reduce(
+        (totals, debt) => {
+            totals.totalDebt += debt.remainingAmount;
+            totals.totalOriginal += debt.amount;
+            return totals;
+        },
+        { totalDebt: 0, totalOriginal: 0 }
+    );
+    return totalOriginal > 0 ? ((totalOriginal - totalDebt) / totalOriginal) * 100 : 0;
+});
 const pieChartData = computed(() => ({
     labels: debts.value.map(debt => debt.creditor),
     datasets: [
@@ -31,12 +41,15 @@ const pieChartOptions = {
 };
 onMounted(async () => {
     await store.fetchDebts();
-    const totalDebt = debts.value.reduce((total, debt) => total + debt.remainingAmount, 0);
-    const totalOriginal = debts.value.reduce((total, debt) => total + debt.amount, 0);
-    const totalPaid = totalOriginal - totalDebt;
-    const percentage = totalPaid / totalOriginal * 100;
-
-    progressCompletionPercentage.value = isNaN(percentage) ? 0 : percentage;
+    const { totalDebt, totalOriginal } = debts.value.reduce(
+        (totals, debt) => {
+            totals.totalDebt += debt.remainingAmount;
+            totals.totalOriginal += debt.amount;
+            return totals;
+        },
+        { totalDebt: 0, totalOriginal: 0 }
+    );
+    progressCompletionPercentage.value = totalOriginal > 0 ? ((totalOriginal - totalDebt) / totalOriginal) * 100 : 0;
 });
 </script>
 <template>
@@ -49,8 +62,7 @@ onMounted(async () => {
                     0).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}} left. Keep going!</p>
                 <div class="progress" role="progressbar" aria-label="Default striped example"
                     :aria-valuenow="progressCompletionPercentage.toFixed(0)" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                        :style="{ width: progressCompletionPercentage + '%' }">
+                    <div class="progress-bar" :style="{ width: progressCompletionPercentage + '%' }">
                         {{ progressCompletionPercentage.toFixed(0) }}%
                     </div>
                 </div>
