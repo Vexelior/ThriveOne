@@ -332,7 +332,7 @@ const formattedPercentage = (percentage: number) => {
                         <div class="card">
                             <h1 class="card-header">Charges</h1>
                             <div class="card-body">
-                                <div v-if="charges">
+                                <div v-if="charges && charges.length === 0">
                                     <span class="list-group-item">No charges available.</span>
                                 </div>
                                 <ul class="list-group scrollable-list">

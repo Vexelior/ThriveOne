@@ -29,6 +29,9 @@ const addPayment = async () => {
 
 <template>
     <div class="container">
+        <router-link :to="`/debt/${debtId}`" class="btn btn-secondary mb-3">
+            <font-awesome-icon :icon="['fas', 'arrow-left']" />
+        </router-link>
         <h1 class="my-4">Submit Payment</h1>
         <div v-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
         <form @submit.prevent="addPayment" class="debt-form">
@@ -42,7 +45,6 @@ const addPayment = async () => {
                 <input type="date" class="form-control" id="date" v-model="date" required />
             </div>
             <button type="submit" class="btn btn-primary" id="submit">Submit</button>
-            <router-link :to="'/debt/' + debtId" class="btn btn-secondary ms-2">Cancel</router-link>
         </form>
     </div>
 </template>

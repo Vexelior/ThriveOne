@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { useDebtStore } from '@/features/debt/store/useDebtStore';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 
 const store = useDebtStore();
+const router = useRouter();
 const route = useRoute();
 const debtId = computed(() => {
     return route.params.id as string;
@@ -21,6 +23,7 @@ const error = ref('');
 const success = ref('');
 const imageInput = ref(null);
 const images = ref([]);
+const dateAdded = ref('');
 
 onMounted(async () => {
     try {
@@ -41,6 +44,7 @@ onMounted(async () => {
             type.value = debt.type;
             notes.value = debt.notes;
             image.value = debt.imageSource || '';
+            dateAdded.value = new Date(debt.dateAdded).toLocaleDateString();
         });
     } catch (err) {
         error.value = 'Failed to load images. Please try again.';
@@ -64,11 +68,14 @@ const updateDebt = async () => {
             percentageChange: 0,
             lastPayment: 0,
             imageSource: selectedImage.source,
-            imageId: selectedImage.id
+            imageId: selectedImage.id,
+            dateEdited: new Date().toISOString(),
+            dateAdded: dateAdded.value ? new Date(dateAdded.value).toISOString() : new Date().toISOString()
         }
         await store.updateDebt(debtId.value, newDebt);
         success.value = 'Debt updated successfully!';
         resetForm();
+        router.push('/debt/' + debtId.value);
     } catch (err) {
         error.value = 'Failed to add debt. Please try again.';
         console.error('Error adding debt:', err);
@@ -104,10 +111,10 @@ const toggleFileInput = () => {
     showFileInput.value = !showFileInput.value;
     if (showFileInput.value) {
         image.value = '';
-        imageInput.value.value = '';
+        imageInput.value = '';
     } else {
         image.value = '';
-        imageInput.value.value = '';
+        imageInput.value = '';
     }
 };
 
@@ -160,6 +167,9 @@ const convertFileToBase64 = (file) => {
 </script>
 <template>
     <div class="container">
+        <router-link :to="`/debt/${debtId}`" class="btn btn-secondary mb-3">
+            <font-awesome-icon :icon="['fas', 'arrow-left']" />
+        </router-link>
         <h1 class="my-4">Edit Debt</h1>
         <div class="alert alert-warning alert-dismissible" role="alert" v-if="error">
             <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="me-2" />
@@ -232,7 +242,6 @@ const convertFileToBase64 = (file) => {
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <router-link to="/debt" class="btn btn-secondary">Back</router-link>
                 </div>
                 <button type="button" class="btn btn-danger ms-2" @click="deleteDebt">Delete</button>
             </div>

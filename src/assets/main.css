@@ -382,7 +382,6 @@ select:focus {
 
 .content-wrapper {
   margin-left: 250px;
-  /* Adjust based on sidebar width */
   padding: 2rem;
   transition: margin-left 0.3s ease;
 }
@@ -424,9 +423,14 @@ button.notification-icon:active {
   padding: 0.5rem 1rem;
 }
 
-.notification-dropdown .dropdown-menu .dropdown-item {
+.notification-dropdown .dropdown-item {
   color: var(--quaternary) !important;
   padding: 0.5rem 1rem !important;
+}
+
+.notification-dropdown .dropdown-item:hover {
+  background-color: var(--primary) !important;
+  cursor: default !important;
 }
 
 .scrollable-months {

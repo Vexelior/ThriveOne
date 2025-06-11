@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { useDebtStore } from '@/features/debt/store/useDebtStore';
 import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const store = useDebtStore();
 const creditor = ref('');
 const amount = ref(0);
@@ -53,6 +55,7 @@ const addDebt = async () => {
         await store.addDebt(newDebt);
         success.value = 'Debt added successfully!';
         resetForm();
+        router.push('/debt');
     } catch (err) {
         error.value = 'Failed to add debt. Please try again.';
         console.error('Error adding debt:', err);
@@ -74,10 +77,10 @@ const toggleFileInput = () => {
     showFileInput.value = !showFileInput.value;
     if (showFileInput.value) {
         image.value = '';
-        imageInput.value.value = '';
+        imageInput.value = '';
     } else {
         image.value = '';
-        imageInput.value.value = '';
+        imageInput.value = '';
     }
 };
 
@@ -101,7 +104,6 @@ const addImage = async () => {
             };
             await store.uploadImage(img);
             success.value = 'Image uploaded successfully!';
-            resetForm();
             await store.getAllImages();
         } catch {
             error.value = 'Failed to upload image. Please try again.';
@@ -113,7 +115,6 @@ const addImage = async () => {
     showFileInput.value = false;
     try {
         store.images = await store.getAllImages();
-        allImages.value = store.images;
     } catch (err) {
         error.value = 'Failed to load images after upload. Please try again.';
     }
@@ -130,6 +131,9 @@ const convertFileToBase64 = (file) => {
 </script>
 <template>
     <div class="container">
+        <router-link to="/debt" class="btn btn-secondary mb-3">
+            <font-awesome-icon :icon="['fas', 'arrow-left']" />
+        </router-link>
         <h1 class="my-4">New Debt</h1>
         <div class="alert alert-warning alert-dismissible" role="alert" v-if="error">
             <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="me-2" />
