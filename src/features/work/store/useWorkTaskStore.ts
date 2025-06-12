@@ -35,8 +35,9 @@ export const useWorkTaskStore = defineStore('WorkTask', () => {
 
   function addWorkTask(workTask : WorkTask) {
     apiClient.post('/WorkTask', workTask)
-      .then(() => {
-        fetchWorkTasks()
+      .then((response) => {
+        const newTask = response.data as unknown as WorkTask
+        workTasks.value.push(newTask)
       })
       .catch((error) => {
         console.error('Error adding WorkTask:', error)

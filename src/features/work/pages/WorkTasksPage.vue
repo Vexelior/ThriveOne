@@ -99,9 +99,8 @@ function handleTaskSelection(event: Event) {
                     </button>
                 </div>
             </div>
-            <EditTaskModal v-model:selectedTask="selectedTask" @task-success="handleSuccess"
-                @task-error="handleError" />
-            <NewTaskModal @task-success="handleSuccess" @task-error="handleError" />
+            <EditTaskModal v-model:selectedTask="selectedTask" />
+            <NewTaskModal  />
         </section>
         <section class="container mt-3" id="app-area">
             <div class="row">

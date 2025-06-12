@@ -477,6 +477,19 @@ button.notification-icon:active {
   justify-content: center;
 }
 
+.store-alert {
+  position: fixed !important;
+  top: 5% !important;
+  left: 55% !important;
+  transform: translate(-50%, -50%);
+  z-index: 99999 !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  opacity: 0.9 !important;
+  transition: opacity 0.3s ease !important;
+}
+
 #preloader .text-primary {
   font-size: 2rem !important;
   color: var(--primary) !important;

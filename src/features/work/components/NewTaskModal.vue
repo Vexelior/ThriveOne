@@ -109,15 +109,10 @@ const defaultMarkdown = `
 --- 
 `;
 
-const emit = defineEmits<{
-    (e: 'task-success', message: string): void;
-    (e: 'task-error', message: string): void;
-}>();
-
 const taskTitle = ref('')
 const taskDescription = ref('')
-const taskPriority = ref('')
-const taskStatus = ref('')
+const taskPriority = ref('Low')
+const taskStatus = ref('Not Started')
 const taskDueDate = ref('')
 const taskMarkdown = ref(defaultMarkdown)
 const taskCompletedDate = ref('')
@@ -136,7 +131,6 @@ const ensureAllFieldsFilled = () => {
 
 const handleTaskPost = async () => {
     if (!ensureAllFieldsFilled()) {
-        emit('task-error', 'Please fill in all fields')
         return
     }
 
@@ -156,14 +150,11 @@ const handleTaskPost = async () => {
 
     const html = marked.parse(taskMarkdown.value);
     taskData.html = html;
-    try {
-        await store.addWorkTask(taskData)
-        emit('task-success', 'Task created successfully!')
-        resetForm()
-    } catch (error) {
-        console.error('Error creating task:', error)
-        emit('task-error', 'Error creating task - ' + error.response.data.title)
-    }
+
+    await store.addWorkTask(taskData)
+        .then(() => {
+            resetForm()
+        })
 }
 
 const resetForm = () => {

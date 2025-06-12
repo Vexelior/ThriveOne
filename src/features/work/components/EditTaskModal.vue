@@ -14,8 +14,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'update:selectedTask', task: WorkTask | null): void;
-    (e: 'task-success', message: string): void;
-    (e: 'task-error', message: string): void;
 }>();
 
 const taskId = ref(props.selectedTask ? props.selectedTask.id : '');
@@ -75,7 +73,7 @@ const formatDate = (date: string | number | Date) => {
     return new Date(date).toISOString().split('T')[0];
 };
 
-function handleTaskEdit() {
+async function handleTaskEdit() {
     const updatedTask: WorkTask = {
         id: taskId.value,
         title: taskTitle.value,
@@ -89,14 +87,7 @@ function handleTaskEdit() {
         isCompleted: taskStatus.value === 'Completed'
     };
 
-    store.updateWorkTask(updatedTask.id, updatedTask)
-        .then(() => {
-            emit('task-success', 'Task updated successfully');
-            emit('update:selectedTask', null);
-        })
-        .catch((error) => {
-            emit('task-error', `Error updating task: ${error.message}`);
-        });
+    await store.updateWorkTask(taskId.value, updatedTask)
 
     store.fetchWorkTasks().then(tasks => {
         store.workTasks = tasks;
