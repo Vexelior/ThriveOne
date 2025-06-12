@@ -36,7 +36,6 @@ apiClient.interceptors.response.use(
         const method = (error.config as any)?._requestMethod;
         if (method) {
             requestStore.setError(
-                `Failed to complete request: ` +
                 (error.response?.data?.message || error.message || 'An unexpected error occurred.')
             );
         } else {

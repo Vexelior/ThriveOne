@@ -152,9 +152,8 @@ const handleTaskPost = async () => {
     taskData.html = html;
 
     await store.addWorkTask(taskData)
-        .then(() => {
-            resetForm()
-        })
+
+    resetForm()
 }
 
 const resetForm = () => {

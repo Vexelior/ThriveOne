@@ -18,27 +18,6 @@ onMounted(() => {
     calendarModalRef.value?.updateCalendar();
 });
 
-function handleSuccess(message: string) {
-    calendarModalRef.value?.updateCalendar();
-    alertMessage.value = message;
-    alertType.value = 'alert-success';
-    store.fetchWorkTasks();
-    selectedTask.value = null;
-    setTimeout(() => {
-        alertMessage.value = '';
-        alertType.value = '';
-    }, 3000);
-}
-
-function handleError(message: string) {
-    alertMessage.value = message;
-    alertType.value = 'alert-danger';
-    setTimeout(() => {
-        alertMessage.value = '';
-        alertType.value = '';
-    }, 3000);
-}
-
 function handleTaskSelection(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const taskId = selectElement.value;
