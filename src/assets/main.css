@@ -228,12 +228,9 @@ select:focus {
   text-decoration: none !important;
 }
 
-.add-debt-form {
+.debt-list-container .card {
   background-color: var(--quaternary) !important;
-  padding: 1rem !important;
-  border-radius: 5px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important;
-  border: 1px solid var(--primary) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .debt-detail .card {
@@ -295,13 +292,13 @@ select:focus {
 }
 
 .debt-form {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
   padding: 2rem !important;
   background-color: var(--quaternary) !important;
   border-radius: 10px !important;
+  border: 1px solid var(--primary) !important;
 }
 
-.dashboard {
+.dashboard, .main-content {
   background-color: var(--quaternary) !important;
   padding: 2rem !important;
   border-radius: 10px !important;

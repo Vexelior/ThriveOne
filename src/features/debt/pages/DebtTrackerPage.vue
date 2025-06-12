@@ -12,7 +12,7 @@ onMounted(() => {
 
 </script>
 <template>
-    <div class="container py-4">
+    <div class="container main-content py-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
             <div class="flex-fill d-flex justify-content-start">
                 <h1 class="my-4">Debt Tracker</h1>

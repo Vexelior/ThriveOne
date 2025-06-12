@@ -28,7 +28,7 @@ const addInterestCharge = async () => {
 </script>
 
 <template>
-    <div class="container">
+    <div class="container main-content py-4">
         <router-link :to="`/debt/${debtId}`" class="btn btn-secondary mb-3">
             <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </router-link>

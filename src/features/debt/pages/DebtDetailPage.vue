@@ -66,7 +66,7 @@ const formattedPercentage = (percentage: number) => {
 </script>
 
 <template>
-    <div class="container debt-detail">
+    <div class="container debt-detail main-content py-4">
         <router-link to="/debt" class="btn btn-secondary mt-3" title="Go Back">
             <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </router-link>

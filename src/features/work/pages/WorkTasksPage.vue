@@ -52,9 +52,9 @@ function handleTaskSelection(event: Event) {
 </script>
 
 <template>
-    <div>
+    <div class="container main-content py-4">
         <CalendarModal />
-        <section class="container py-4">
+        <section class="container">
             <h1 class="my-4">Work Task Tracker</h1>
             <div class="row">
                 <div id="alert-container">
@@ -126,7 +126,7 @@ function handleTaskSelection(event: Event) {
             <div class="row">
                 <div class="col-lg-12">
                     <div v-if="selectedTask" class="markdown-body card" id="task-html">
-                        <div class="card-body ps-4 pe-4 pt-0 pb-0">
+                        <div class="card-body ps-0 pt-0 pb-0">
                             <div v-html="selectedTask.html"></div>
                         </div>
                     </div>

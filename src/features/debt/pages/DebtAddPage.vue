@@ -130,7 +130,7 @@ const convertFileToBase64 = (file) => {
 };
 </script>
 <template>
-    <div class="container">
+    <div class="container main-content py-4">
         <router-link to="/debt" class="btn btn-secondary mb-3">
             <font-awesome-icon :icon="['fas', 'arrow-left']" />
         </router-link>

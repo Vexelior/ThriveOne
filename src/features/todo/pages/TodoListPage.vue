@@ -12,7 +12,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container py-4">
+    <div class="container main-content py-4">
         <h1 class="my-4">Todo</h1>
         <TodoInput />
         <TodoItem :todos="store.todos" />
