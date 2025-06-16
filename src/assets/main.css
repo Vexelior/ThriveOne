@@ -185,20 +185,20 @@ select:focus {
 }
 
 .dropdown-menu {
-  background-color: var(--primary) !important;
+  background-color: var(--tertiary) !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   border: 1px solid var(--secondary) !important;
 }
 
 .dropdown-item {
-  color: var(--quaternary) !important;
-  background-color: var(--primary) !important;
+  color: black !important;
+  background-color: var(--tertiary) !important;
   padding: 0.5rem 1rem !important;
 }
 
 .dropdown-item:hover {
-  background-color: var(--secondary) !important;
-  color: var(--quaternary) !important;
+  background-color: var(--quaternary) !important;
+  color: var(--secondary) !important;
 }
 
 .dropdown-item.active {
@@ -224,7 +224,13 @@ select:focus {
 }
 
 .debt-list-container a {
-  color: var(--quaternary) !important;
+  color: black !important;
+  text-decoration: none !important;
+}
+
+.debt-list-container a:hover {
+  color: var(--secondary) !important;
+  transition: color 0.3s ease !important;
   text-decoration: none !important;
 }
 
@@ -399,7 +405,7 @@ select:focus {
 
 .notification-dropdown {
   background-color: var(--primary) !important;
-  color: var(--quaternary) !important;
+  color: black !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
@@ -423,19 +429,19 @@ button.notification-icon:active {
 }
 
 .notification-dropdown .dropdown-menu .dropdown-header {
-  background-color: var(--primary);
+  background-color: var(--tertiary) !important;
   color: var(--quaternary);
   font-weight: bold;
   padding: 0.5rem 1rem;
 }
 
 .notification-dropdown .dropdown-item {
-  color: var(--quaternary) !important;
+  color: var(--tertiary) !important;
   padding: 0.5rem 1rem !important;
 }
 
 .notification-dropdown .dropdown-item:hover {
-  background-color: var(--primary) !important;
+  background-color: var(--tertiary) !important;
   cursor: default !important;
 }
 
