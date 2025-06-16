@@ -32,7 +32,6 @@ const greeting = computed(() => {
 // Quick Stats
 const totalTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.length : 0);
 const completedTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => t.isCompleted).length : 0);
-const totalDebt = computed(() => Array.isArray(debtStore.debts) ? debtStore.debts.reduce((sum, d) => sum + d.remainingAmount, 0) : 0);
 const totalCompletedWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => t.isCompleted).length : 0);
 const totalWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.length : 0);
 
@@ -110,43 +109,6 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
 
 <template>
     <div class="dashboard container py-4">
-        <!-- Notification Bell -->
-        <div class="position-absolute top-0 end-0 mt-3 me-3" style="z-index: 10;">
-            <div class="dropdown notification-dropdown">
-                <button class="btn position-relative p-2 dropdown-toggle notification-icon" type="button"
-                    id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <FontAwesomeIcon :icon="['fas', 'bell']" size="lg" />
-                    <span v-if="totalOverdue > 0"
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                        style="font-size: 0.8rem;">
-                        {{ totalOverdue }}
-                    </span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown"
-                    style="min-width: 300px;">
-                    <li v-if="totalOverdue === 0" class="dropdown-item text-muted">
-                        No overdue items 🎉
-                    </li>
-                    <template v-else>
-                        <li v-if="overdueTodos && overdueTodos.length" class="dropdown-header">Overdue Todos</li>
-                        <li v-for="todo in overdueTodos" :key="'overdue-todo-' + todo.id"
-                            class="dropdown-item d-flex align-items-center">
-                            <FontAwesomeIcon :icon="['fas', 'triangle-exclamation']" class="me-2 text-warning" />
-                            <span>{{ todo.title }}</span>
-                        </li>
-                        <li v-if="overdueWorkTasks && overdueWorkTasks.length" class="dropdown-header text-danger mt-2">
-                            Overdue Work Tasks
-                        </li>
-                        <li v-for="task in overdueWorkTasks" :key="'overdue-task-' + task.id"
-                            class="dropdown-item d-flex align-items-center">
-                            <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
-                            <span>{{ task.title }}</span>
-                        </li>
-                    </template>
-                </ul>
-            </div>
-        </div>
-
         <!-- Personalized Greeting -->
         <div class="mb-4">
             <h2 class="fw-bold greeting">{{ greeting }}</h2>
@@ -159,7 +121,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
 
         <!-- Quick Stats Cards -->
         <div class="row g-3 mb-4 stats-cards">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card text-bg-primary shadow-sm h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Todos</h5>
@@ -167,17 +129,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-bg-secondary shadow-sm h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Total Debt</h5>
-                        <p class="display-6">{{ totalDebt.toLocaleString('en-US', {
-                            style: 'currency', currency: 'USD'
-                        }) }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card text-bg-tertiary shadow-sm h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Work Tasks</h5>
