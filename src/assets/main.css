@@ -376,8 +376,6 @@ select:focus {
 }
 
 /* Add margin to the top of the main content to avoid overlap with the toggle button */
-.content-wrapper {}
-
 .sidebar-toggle-button:hover {
   background-color: var(--secondary);
   color: var(--quaternary);
