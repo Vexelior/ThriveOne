@@ -426,13 +426,13 @@ button.notification-icon:active {
 
 .notification-dropdown .dropdown-menu .dropdown-header {
   background-color: var(--tertiary) !important;
-  color: var(--quaternary);
+  color: black !important;
   font-weight: bold;
   padding: 0.5rem 1rem;
 }
 
 .notification-dropdown .dropdown-item {
-  color: var(--tertiary) !important;
+  color: black !important;
   padding: 0.5rem 1rem !important;
 }
 
