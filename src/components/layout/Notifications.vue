@@ -9,9 +9,7 @@ const workTaskStore = useWorkTaskStore();
 const overdueTodos = computed(() => {
     return todoStore.todos.filter(todo => todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed);
 });
-const overdueWorkTasks = computed(() => {
-    return workTaskStore.workTasks.filter(task => task.dueDate && new Date(task.dueDate) < new Date() && !task.completed);
-});
+const overdueWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.dueDate).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0) && !t.isCompleted) : []);
 const totalOverdue = computed(() => overdueTodos.value.length + overdueWorkTasks.value.length);
 onMounted(() => {
     todoStore.fetchTodos();
