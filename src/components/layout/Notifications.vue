@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useTodoStore } from '@/features/todo/store/useTodoStore';
 import { useWorkTaskStore } from '@/features/work/store/useWorkTaskStore';
 
 const todoStore = useTodoStore();
 const workTaskStore = useWorkTaskStore();
-const overdueTodos = computed(() => {
-    return todoStore.todos.filter(todo => todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed);
-});
+
+const overdueTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => !t.isCompleted && t.due && new Date(t.due).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) : []);
 const overdueWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => new Date(t.dueDate).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0) && !t.isCompleted) : []);
 const totalOverdue = computed(() => overdueTodos.value.length + overdueWorkTasks.value.length);
+
 onMounted(() => {
     todoStore.fetchTodos();
     workTaskStore.fetchWorkTasks();

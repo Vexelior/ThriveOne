@@ -13,9 +13,7 @@ function closeSidebar() {
 </script>
 
 <template>
-    <!-- Desktop Sidebar -->
     <div class="container-fluid">
-        <!-- Mobile Hamburger Button -->
         <button class="btn btn-primary d-md-none m-2 sidebar-toggle-button" type="button" @click="openSidebar"
             aria-label="Open sidebar">
             <font-awesome-icon :icon="['fas', 'bars']" />
@@ -61,8 +59,6 @@ function closeSidebar() {
             </div>
         </div>
     </div>
-
-    <!-- Mobile Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-start sidebar d-md-none" tabindex="-1" :class="{ show: sidebarOpen }"
         :style="{ visibility: sidebarOpen ? 'visible' : 'hidden' }" @click.self="closeSidebar">
         <div class="offcanvas-header d-flex justify-content-end">
