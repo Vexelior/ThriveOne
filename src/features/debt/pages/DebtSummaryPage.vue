@@ -54,7 +54,7 @@ onMounted(async () => {
 </script>
 <template>
     <div class="container main-content py-4">
-        <h1 class="my-4">Summary</h1>
+        <h1 class="mb-4">Summary</h1>
         <div class="row bg-light data-card" style="border-radius: 10px;">
             <div class="col-md-12 py-3">
                 <h2 class="text-center">Overall Progress</h2>

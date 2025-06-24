@@ -21,8 +21,11 @@ function closeSidebar() {
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar d-none d-md-block">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 h-100 w-100">
                 <h1 class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none">
-                    <img class="img img-fluid me-2" src="../../assets/images/favicon-32x32.png" alt="ThriveOne Logo" />
-                    <span class="fs-5 d-none d-sm-inline">ThriveOne</span>
+                    <a href="/">
+                        <img class="img img-fluid me-2" src="../../assets/images/favicon-32x32.png"
+                            alt="ThriveOne Logo" />
+                        <span class="fs-5 d-none d-sm-inline">ThriveOne</span>
+                    </a>
                 </h1>
                 <ul
                     class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start sidebar-menu">
@@ -61,11 +64,18 @@ function closeSidebar() {
     </div>
     <div class="offcanvas offcanvas-start sidebar d-md-none" tabindex="-1" :class="{ show: sidebarOpen }"
         :style="{ visibility: sidebarOpen ? 'visible' : 'hidden' }" @click.self="closeSidebar">
-        <div class="offcanvas-header d-flex justify-content-end">
-            <button type="button" class="btn sidebar-close-btn" @click="closeSidebar">
+        <div class="offcanvas-header d-flex align-items-center justify-content-between w-100">
+            <div class="d-flex align-items-center">
+                <a href="/">
+                    <img class="img img-fluid me-2" src="../../assets/images/favicon-32x32.png" alt="ThriveOne Logo" />
+                    <span class="fs-2 d-sm-inline text-light">ThriveOne</span>
+                </a>
+            </div>
+            <button type="button" class="btn sidebar-close-btn ms-2" @click="closeSidebar">
                 <font-awesome-icon :icon="['fas', 'times']" aria-label="Close sidebar" class="text-light fs-2" />
             </button>
         </div>
+
         <div class="offcanvas-body">
             <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start sidebar-menu">
                 <a href="/">

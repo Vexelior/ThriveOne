@@ -15,7 +15,7 @@ onMounted(() => {
     <div class="container main-content py-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
             <div class="flex-fill d-flex justify-content-start">
-                <h1 class="my-4">Debt Tracker</h1>
+                <h1 class="mb-4">Debt Tracker</h1>
             </div>
             <router-link class="btn btn-primary ms-md-3" to="debt/add" style="height: auto;">
                 <FontAwesomeIcon :icon="['fas', 'plus']" class="me-1" /> Add Debt

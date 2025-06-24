@@ -139,25 +139,50 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
             </div>
         </div>
 
-        <!-- Today’s Focus -->
-        <div v-if="todaysTodo && todaysTodo.length > 0" class="todays-focus mb-4">
-            <h3 class="mb-3">Today's Focus</h3>
-            <ul class="list-group">
-                <li v-for="todo in (Array.isArray(todaysTodo) ? todaysTodo : (todaysTodo ? [todaysTodo] : []))"
-                    :key="'todays-todo-' + todo.id" class="list-group-item">
-                    <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
-                    Todo: <b>{{ todo.title }}</b>
-                </li>
-                <li v-for="task in (Array.isArray(todaysWorkTask) ? todaysWorkTask : (todaysWorkTask ? [todaysWorkTask] : []))"
-                    :key="'todays-worktask-' + task.id" class="list-group-item">
-                    <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
-                    Work Task: <b>{{ task.title }}</b>
-                </li>
-                <li v-if="(!todaysTodo || (Array.isArray(todaysTodo) && !todaysTodo.length)) && (!todaysWorkTask || (Array.isArray(todaysWorkTask) && !todaysWorkTask.length))"
-                    class="list-group-item text-muted">
-                    All caught up for today!
-                </li>
-            </ul>
+        <div class="row mb-4">
+            <!-- Today’s Focus -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div v-if="todaysTodo && todaysTodo.length > 0 || todaysWorkTask" class="todays-focus h-100">
+                    <h3 class="mb-3">Today's Focus</h3>
+                    <ul class="list-group">
+                        <li v-for="todo in (Array.isArray(todaysTodo) ? todaysTodo : (todaysTodo ? [todaysTodo] : []))"
+                            :key="'todays-todo-' + todo.id" class="list-group-item">
+                            <FontAwesomeIcon :icon="['fas', 'square-check']" class="me-2 text-primary" />
+                            Todo: <b>{{ todo.title }}</b>
+                        </li>
+                        <li v-for="task in (Array.isArray(todaysWorkTask) ? todaysWorkTask : (todaysWorkTask ? [todaysWorkTask] : []))"
+                            :key="'todays-worktask-' + task.id" class="list-group-item">
+                            <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
+                            Work Task: <b>{{ task.title }}</b>
+                        </li>
+                        <li v-if="(!todaysTodo || (Array.isArray(todaysTodo) && !todaysTodo.length)) && (!todaysWorkTask || (Array.isArray(todaysWorkTask) && !todaysWorkTask.length))"
+                            class="list-group-item text-muted">
+                            All caught up for today!
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Recent Activity Feed -->
+            <div class="col-md-6">
+                <div v-if="recentTodos && recentWorkTasks && (recentTodos.length > 0 || recentWorkTasks.length > 0)"
+                    class="recent-activity h-100">
+                    <h3 class="mb-3">Recent Activity</h3>
+                    <ul class="list-group">
+                        <li v-for="todo in recentTodos" :key="'todo-' + todo.id" class="list-group-item">
+                            <FontAwesomeIcon :icon="['fas', 'check-circle']" class="text-success me-2" />
+                            Completed Todo: <b>{{ todo.title }}</b>
+                        </li>
+                        <li v-for="task in recentWorkTasks" :key="'task-' + task.id" class="list-group-item">
+                            <FontAwesomeIcon :icon="['fas', 'check-circle']" class="text-success me-2" />
+                            Completed Work Task: <b>{{ task.title }}</b>
+                        </li>
+                        <li v-if="recentTodos.length === 0 && recentWorkTasks.length === 0" class="list-group-item text-muted">
+                            No recent activity.
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- This Week’s Focus -->
@@ -168,24 +193,6 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
                     :key="'thisweek-worktask-' + task.id" class="list-group-item">
                     <FontAwesomeIcon :icon="['fas', 'briefcase']" class="me-2 text-info" />
                     Work Task: <b>{{ task.title }}</b>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Recent Activity Feed -->
-        <div v-if="recentTodos && recentWorkTasks && (recentTodos.length > 0 || recentWorkTasks.length > 0)" class="recent-activity mb-4">
-            <h3 class="mb-3">Recent Activity</h3>
-            <ul class="list-group">
-                <li v-for="todo in recentTodos" :key="'todo-' + todo.id" class="list-group-item">
-                    <FontAwesomeIcon :icon="['fas', 'check-circle']" class="text-success me-2" />
-                    Completed Todo: <b>{{ todo.title }}</b>
-                </li>
-                <li v-for="task in recentWorkTasks" :key="'task-' + task.id" class="list-group-item">
-                    <FontAwesomeIcon :icon="['fas', 'check-circle']" class="text-success me-2" />
-                    Completed Work Task: <b>{{ task.title }}</b>
-                </li>
-                <li v-if="recentTodos.length === 0 && recentWorkTasks.length === 0" class="list-group-item text-muted">
-                    No recent activity.
                 </li>
             </ul>
         </div>

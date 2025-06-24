@@ -13,7 +13,7 @@ onMounted(() => {
 
 <template>
     <div class="container main-content py-4">
-        <h1 class="my-4">Todo</h1>
+        <h1 class="mb-4">Todo</h1>
         <TodoInput />
         <TodoItem :todos="store.todos" />
     </div>

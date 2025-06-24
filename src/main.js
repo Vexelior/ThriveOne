@@ -23,4 +23,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (preloader) {
         preloader.style.display = 'none';
     }
-});
+}, false);
