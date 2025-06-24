@@ -20,7 +20,7 @@ const routes = [
     children: [
       { path: '', component: DashboardPage, meta: { title: 'Dashboard' } },
       { path: '/todo', component: TodoListPage, meta: { title: 'Todo List' } },
-      { path: '/worktasks', component: WorkTasksPage, meta: { title: 'Work Tasks' } },
+      { path: '/work-tasks', component: WorkTasksPage, meta: { title: 'Work Tasks' } },
       { path: '/debt', component: DebtTrackerPage, meta: { title: 'Debt Tracker' } },
       { path: '/debt/add', component: DebtAddPage, meta: { title: 'Add Debt' } },
       { path: '/debt/:id', component: DebtDetailPage, meta: { title: 'Debt Details' } },

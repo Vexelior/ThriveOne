@@ -53,7 +53,7 @@ function closeSidebar() {
                             <font-awesome-icon :icon="['fas', 'clipboard-list']" /><span>Todo</span>
                         </li>
                     </a>
-                    <a href="/worktasks">
+                    <a href="/work-tasks">
                         <li class="nav-item">
                             <font-awesome-icon :icon="['fas', 'briefcase']" /><span>Work Tasks</span>
                         </li>
@@ -102,7 +102,7 @@ function closeSidebar() {
                         <font-awesome-icon :icon="['fas', 'clipboard-list']" /><span>Todo</span>
                     </li>
                 </a>
-                <a href="/worktasks">
+                <a href="/work-tasks">
                     <li class="nav-item">
                         <font-awesome-icon :icon="['fas', 'briefcase']" /><span>Work Tasks</span>
                     </li>
