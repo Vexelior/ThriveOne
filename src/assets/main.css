@@ -417,11 +417,13 @@ button.notification-icon {
 button.notification-icon:focus {
   outline: none !important;
   box-shadow: 0 0 5px var(--secondary) !important;
+  color: var(--quaternary) !important;
 }
 
 button.notification-icon:active {
   outline: none !important;
   box-shadow: 0 0 5px var(--secondary) !important;
+  color: var(--quaternary) !important;
 }
 
 button.notification-icon:hover {
@@ -429,21 +431,33 @@ button.notification-icon:hover {
   transition: color 0.3s ease !important;
 }
 
+.notification-dropdown .dropdown-menu {
+  background-color: var(--primary) !important;
+  border: 1px solid var(--secondary) !important;
+  border-radius: 5px !important;
+  padding: 0 !important;
+  width: 300px !important;
+}
+
 .notification-dropdown .dropdown-menu .dropdown-header {
-  background-color: var(--tertiary) !important;
-  color: black !important;
+  color: white !important;
   font-weight: bold;
   padding: 0.5rem 1rem;
 }
 
 .notification-dropdown .dropdown-item {
-  color: black !important;
+  background-color: var(--primary) !important;
+  color: white !important;
   padding: 0.5rem 1rem !important;
 }
 
 .notification-dropdown .dropdown-item:hover {
-  background-color: var(--tertiary) !important;
   cursor: default !important;
+}
+
+#notificationDropdown .dropdown-item:focus {
+  background-color: var(--secondary) !important;
+  color: var(--quaternary) !important;
 }
 
 .scrollable-months {
