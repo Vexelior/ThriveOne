@@ -2,6 +2,7 @@
 import { watch, ref, defineProps, defineEmits, onMounted } from 'vue';
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
 import { WorkTask } from '../types/worktask';
+import showdown from 'showdown';
 import { Modal } from 'bootstrap';
 import { marked } from 'marked';
 
@@ -21,6 +22,7 @@ const taskDescription = ref(props.selectedTask ? props.selectedTask.description 
 const taskPriority = ref(props.selectedTask ? props.selectedTask.priority : 'Low');
 const taskStatus = ref(props.selectedTask ? props.selectedTask.status : 'Not Started');
 const taskDueDate = ref(props.selectedTask ? props.selectedTask.dueDate : '');
+const taskHtml = ref(props.selectedTask ? props.selectedTask.html : '');
 const taskCompletedDate = ref(props.selectedTask ? props.selectedTask.completedAt : '');
 
 onMounted(() => {
@@ -31,6 +33,7 @@ onMounted(() => {
         taskPriority.value = props.selectedTask.priority;
         taskStatus.value = props.selectedTask.status;
         taskDueDate.value = props.selectedTask.dueDate;
+        taskHtml.value = props.selectedTask.html;
         taskCompletedDate.value = props.selectedTask.completedAt || '';
     }
 });
@@ -46,6 +49,7 @@ watch(
             taskStatus.value = task.status;
             taskDueDate.value = formatDate(task.dueDate);
             taskCompletedDate.value = formatDate(task.completedAt) || '';
+            taskHtml.value = task.html;
         } else {
             taskId.value = '';
             taskTitle.value = '';
@@ -54,6 +58,7 @@ watch(
             taskStatus.value = 'Not Started';
             taskDueDate.value = '';
             taskCompletedDate.value = '';
+            taskHtml.value = '';
         }
     },
     { immediate: true }
@@ -75,6 +80,7 @@ async function handleTaskEdit() {
         completedAt: taskCompletedDate.value,
         isCompleted: taskStatus.value === 'Completed',
         isDeleted: false,
+        html: marked(taskMarkdown.value),
     };
 
     await store.updateWorkTask(taskId.value, updatedTask)
@@ -90,6 +96,7 @@ async function handleTaskEdit() {
     taskStatus.value = 'Not Started';
     taskDueDate.value = '';
     taskCompletedDate.value = '';
+    taskHtml.value = '';
 
     const modal = document.getElementById('edit-task-modal');
     if (modal) {
