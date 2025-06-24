@@ -10,11 +10,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     async config => {
-        const requestStore = useRequestStore();
         (config as any)._requestMethod = config.method?.toUpperCase();
-        if (config.method && ['POST', 'PUT', 'DELETE'].includes(config.method.toUpperCase())) {
-            requestStore.setSuccess(`Sending ${config.method.toUpperCase()} request to ${config.url}`); 
-        }
         return config;
     },
     error => {

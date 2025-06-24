@@ -6,11 +6,26 @@ export const useRequestStore = defineStore('error', {
     type: '',
   }),
   actions: {
+    setInfo(msg: string) {
+      this.message = msg;
+      this.show = true;
+      this.type = 'secondary';
+      setTimeout(() => {
+        this.clearMessage();
+      }, 3000);
+    },
+    setWarning(msg: string) {
+      this.message = msg;
+      this.show = true;
+      this.type = 'warning';
+      setTimeout(() => {
+        this.clearMessage();
+      }, 3000);
+    },
     setError(msg: string) {
       this.message = msg;
       this.show = true;
       this.type = 'danger';
-
       setTimeout(() => {
         this.clearMessage();
       }, 3000);
@@ -19,7 +34,6 @@ export const useRequestStore = defineStore('error', {
       this.message = msg;
       this.show = true;
       this.type = 'success';
-
       setTimeout(() => {
         this.clearMessage();
       }, 3000);
