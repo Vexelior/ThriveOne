@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
 import { marked } from 'marked';
-
 
 const store = useWorkTaskStore()
 
@@ -21,11 +20,11 @@ const defaultMarkdown = `
 
 #### Developer Research
 - [ ] Research the planned change.  
-- [ ] Document all changes/pseudocode in the **COXXXX - Program Specifications** document.  
-    - If UI changes are required, use **COXXXX - UI PROGRAM SPECIFICATIONS**.  
+- [ ] Document all changes/pseudocode in the **COXXXXX - Program Specifications** document.  
+    - If UI changes are required, use **COXXXXX - UI PROGRAM SPECIFICATIONS**.  
     - Include high-level or low-level pseudocode based on requirements.  
-- [ ] List projected file changes/additions in the **COXXXX – IMPLEMENTATION PLAN** document.  
-- [ ] Run a Coverity scan and populate the initial portion of the **COXXXX - ASQC SCAN** document with results.  
+- [ ] List projected file changes/additions in the **COXXXXX – IMPLEMENTATION PLAN** document.  
+- [ ] Run a Coverity scan and populate the initial portion of the **COXXXXX - ASQC SCAN** document with results.  
 - [ ] Schedule a "Technical Design – Walkthrough" meeting with CO/PF TFAL and developers.
 
 #### Technical Design – Walkthrough Meeting
@@ -33,7 +32,7 @@ const defaultMarkdown = `
     - Review and refine pseudocode and planned changes.
 
 #### Developer Unit Test Research
-- [ ] Populate the **COXXXX - UNIT TEST PLAN AND RESULTS** document with projected test cases.  
+- [ ] Populate the **COXXXXX - UNIT TEST PLAN AND RESULTS** document with projected test cases.  
 - [ ] Schedule a unit test case review meeting with:
     - Assigned BA, Test Lead, TFAL, and another developer working on the same SCR.  
 
@@ -55,15 +54,15 @@ const defaultMarkdown = `
     - [ ] Name it \`CO/PF<ALM number>\`.  
 - [ ] Implement the solution.  
 - [ ] Test the implementation using the proposed Unit Test Plan.  
-    - [ ] Populate results in the **COXXXX - UNIT TEST PLAN AND RESULTS** document.  
-- [ ] Run a second Coverity scan on edited files and populate the final portion of **COXXXX - ASQC SCAN**.  
+    - [ ] Populate results in the **COXXXXX - UNIT TEST PLAN AND RESULTS** document.  
+- [ ] Run a second Coverity scan on edited files and populate the final portion of **COXXXXX - ASQC SCAN**.  
 - [ ] Submit a code review to:  
     - [ ] TFALs of the team.  
     - [ ] 3–4 developers, especially those working on the same SCR.  
     - [ ] TFALs/developers of related teams.  
 - [ ] Populate the ALM comment in the Construction document with the code review "work item" number.  
 - [ ] Add all documents to ALM.  
-    - [ ] Wait to add **COXXXX – CONSTRUCTION WSSR** and **COXXXX – IMPLEMENTATION PLAN** until they include the Changeset number.  
+    - [ ] Wait to add **COXXXXX – CONSTRUCTION WSSR** and **COXXXXX – IMPLEMENTATION PLAN** until they include the Changeset number.  
 - [ ] Schedule a Walkthrough meeting with:
     - TFAL.  
     - BA.  
@@ -71,19 +70,19 @@ const defaultMarkdown = `
     - 3 developers.  
     - Associated TFALs/developers/BAs.  
     - (Optional) Other TFALs of the team.  
-- [ ] Complete the **COXXXX – CONSTRUCTION WSSR** document.  
+- [ ] Complete the **COXXXXX – CONSTRUCTION WSSR** document.  
 
 #### Walkthrough
 - [ ] Conduct the walkthrough meeting (business/partial technical audience).  
     - Review various documents.  
     - If no changes occurred after Technical Design, optional to review:
-        - **COXXXX – DESIGN WSSR** (not required for PF).  
-        - **COXXXX – IMPLEMENTATION PLAN.**  
-        - **COXXXX - UI PROGRAM SPECIFICATIONS / Program Specifications.**  
+        - **COXXXXX – DESIGN WSSR** (not required for PF).  
+        - **COXXXXX – IMPLEMENTATION PLAN.**  
+        - **COXXXXX - UI PROGRAM SPECIFICATIONS / Program Specifications.**  
     - Required to review:
-        - **COXXXX - ASQC SCAN.**  
-        - **COXXXX – CONSTRUCTION WSSR.**  
-        - **COXXXX - UNIT TEST PLAN AND RESULTS.**  
+        - **COXXXXX - ASQC SCAN.**  
+        - **COXXXXX – CONSTRUCTION WSSR.**  
+        - **COXXXXX - UNIT TEST PLAN AND RESULTS.**  
 - [ ] Move PPM to "Construction Walkthrough Complete."  
 
 ---
@@ -94,8 +93,8 @@ const defaultMarkdown = `
 - [ ] Ensure code review is complete and approved by TFAL.  
 - [ ] Pull the latest code from TFS and resolve conflicts.  
 - [ ] Check in the code and populate the Changeset number in:
-    - **COXXXX – CONSTRUCTION WSSR.**  
-    - **COXXXX – IMPLEMENTATION PLAN.**  
+    - **COXXXXX – CONSTRUCTION WSSR.**  
+    - **COXXXXX – IMPLEMENTATION PLAN.**  
 - [ ] Upload remaining documents to ALM.  
 - [ ] Update PPM.
 
@@ -229,11 +228,6 @@ const resetForm = () => {
                                                 v-model="taskCompletedDate">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="titleInput" class="form-label">Body</label>
-                                    <textarea class="form-control" id="task-markdown" rows="20" required
-                                        placeholder="Enter task body in markdown" v-model="taskMarkdown"></textarea>
                                 </div>
                             </form>
                         </div>

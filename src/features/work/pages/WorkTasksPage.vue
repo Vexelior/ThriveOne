@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, watch, ref, nextTick } from 'vue';
 import EditTaskModal from '../components/EditTaskModal.vue'
 import NewTaskModal from '../components/NewTaskModal.vue'
 import CalendarModal from '../components/CalendarModal.vue'
@@ -8,10 +8,56 @@ import { WorkTask } from '../types/worktask';
 
 const store = useWorkTaskStore()
 
+const taskHtmlRef = ref<HTMLElement | null>(null);
+
 const selectedTask = ref<WorkTask | null>(null);
 const alertMessage = ref('');
 const alertType = ref('');
 const calendarModalRef = ref();
+
+async function handleCheckboxChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target && target.type === 'checkbox') {
+        const checkboxes = taskHtmlRef.value?.querySelectorAll('input[type="checkbox"]');
+        let html = selectedTask.value?.html || '';
+        if (checkboxes && selectedTask.value) {
+            const checkboxArray = Array.from(checkboxes);
+            const clickedIndex = checkboxArray.indexOf(target);
+            let currentIndex = -1;
+            html = html.replace(/<input[^>]*type="checkbox"[^>]*>/gi, (match) => {
+                currentIndex++;
+                if (currentIndex === clickedIndex) {
+                    let updated = match.replace(/\schecked(="")?/i, '');
+                    if (target.checked) {
+                        updated = updated.replace(/<input/i, '<input checked');
+                    }
+                    return updated;
+                }
+                return match;
+            });
+
+            selectedTask.value.html = html;
+            await store.updateWorkTask(selectedTask.value.id, selectedTask.value);
+        }
+    }
+}
+
+watch(
+    () => selectedTask.value?.html,
+    async () => {
+        await nextTick();
+        if (selectedTask.value && selectedTask.value.html) {
+            selectedTask.value.html = selectedTask.value.html.replace(/\sdisabled(="")?/gi, '');
+        }
+        if (taskHtmlRef.value) {
+            const checkboxes = taskHtmlRef.value.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.removeAttribute('disabled'));
+            taskHtmlRef.value.removeEventListener('change', handleCheckboxChange);
+            taskHtmlRef.value.addEventListener('change', handleCheckboxChange);
+        }
+    },
+    { immediate: true }
+);
 
 onMounted(() => {
     store.fetchWorkTasks()
@@ -79,7 +125,7 @@ function handleTaskSelection(event: Event) {
                 </div>
             </div>
             <EditTaskModal v-model:selectedTask="selectedTask" />
-            <NewTaskModal  />
+            <NewTaskModal />
         </section>
         <section class="container mt-3" id="app-area">
             <div class="row">
@@ -105,7 +151,7 @@ function handleTaskSelection(event: Event) {
                 <div class="col-lg-12">
                     <div v-if="selectedTask" class="markdown-body card" id="task-html">
                         <div class="card-body ps-0 pt-0 pb-0">
-                            <div v-html="selectedTask.html"></div>
+                            <div ref="taskHtmlRef" v-html="selectedTask.html"></div>
                         </div>
                     </div>
                     <div v-else class="card">
