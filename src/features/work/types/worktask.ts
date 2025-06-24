@@ -9,4 +9,5 @@ export interface WorkTask {
     markdown: string;
     html: string;
     isCompleted: boolean;
+    isDeleted: boolean;
 }

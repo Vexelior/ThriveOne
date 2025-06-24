@@ -2,7 +2,6 @@
 import { watch, ref, defineProps, defineEmits, onMounted } from 'vue';
 import { useWorkTaskStore } from '../store/useWorkTaskStore'
 import { WorkTask } from '../types/worktask';
-import showdown from 'showdown';
 import { Modal } from 'bootstrap';
 import { marked } from 'marked';
 
@@ -23,8 +22,6 @@ const taskPriority = ref(props.selectedTask ? props.selectedTask.priority : 'Low
 const taskStatus = ref(props.selectedTask ? props.selectedTask.status : 'Not Started');
 const taskDueDate = ref(props.selectedTask ? props.selectedTask.dueDate : '');
 const taskCompletedDate = ref(props.selectedTask ? props.selectedTask.completedAt : '');
-const taskMarkdown = ref(props.selectedTask ? props.selectedTask.markdown : '');
-const taskHtml = ref(props.selectedTask ? props.selectedTask.html : '');
 
 onMounted(() => {
     if (props.selectedTask) {
@@ -35,8 +32,6 @@ onMounted(() => {
         taskStatus.value = props.selectedTask.status;
         taskDueDate.value = props.selectedTask.dueDate;
         taskCompletedDate.value = props.selectedTask.completedAt || '';
-        taskMarkdown.value = props.selectedTask.markdown;
-        taskHtml.value = props.selectedTask.html;
     }
 });
 
@@ -51,8 +46,6 @@ watch(
             taskStatus.value = task.status;
             taskDueDate.value = formatDate(task.dueDate);
             taskCompletedDate.value = formatDate(task.completedAt) || '';
-            taskMarkdown.value = task.markdown;
-            taskHtml.value = task.html;
         } else {
             taskId.value = '';
             taskTitle.value = '';
@@ -61,8 +54,6 @@ watch(
             taskStatus.value = 'Not Started';
             taskDueDate.value = '';
             taskCompletedDate.value = '';
-            taskMarkdown.value = '';
-            taskHtml.value = '';
         }
     },
     { immediate: true }
@@ -82,9 +73,8 @@ async function handleTaskEdit() {
         status: taskStatus.value,
         dueDate: taskDueDate.value,
         completedAt: taskCompletedDate.value,
-        markdown: taskMarkdown.value,
-        html: marked(taskMarkdown.value),
-        isCompleted: taskStatus.value === 'Completed'
+        isCompleted: taskStatus.value === 'Completed',
+        isDeleted: false,
     };
 
     await store.updateWorkTask(taskId.value, updatedTask)
@@ -100,8 +90,6 @@ async function handleTaskEdit() {
     taskStatus.value = 'Not Started';
     taskDueDate.value = '';
     taskCompletedDate.value = '';
-    taskMarkdown.value = '';
-    taskHtml.value = '';
 
     const modal = document.getElementById('edit-task-modal');
     if (modal) {
@@ -118,7 +106,6 @@ function handleTaskDelete() {
         .then(() => {
             emit('task-success', 'Task deleted successfully');
             emit('update:selectedTask', null);
-            // Select the first option in the select dropdown
             const selectElement = document.getElementById('task-select') as HTMLSelectElement;
             if (selectElement) {
                 selectElement.selectedIndex = 0;
@@ -137,8 +124,6 @@ function handleTaskDelete() {
     taskStatus.value = 'Not Started';
     taskDueDate.value = '';
     taskCompletedDate.value = '';
-    taskMarkdown.value = '';
-    taskHtml.value = '';
     const modal = document.getElementById('edit-task-modal');
     if (modal) {
         const bootstrapModal = Modal.getInstance(modal) || new Modal(modal);
@@ -214,11 +199,6 @@ function handleTaskDelete() {
                                                 v-model="taskCompletedDate">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="titleInput" class="form-label">Body</label>
-                                    <textarea class="form-control" id="task-markdown" rows="20" required
-                                        placeholder="Enter task body in markdown" v-model="taskMarkdown"></textarea>
                                 </div>
                             </form>
                         </div>
