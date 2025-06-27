@@ -34,20 +34,6 @@ function closeSidebar() {
                             <font-awesome-icon :icon="['fas', 'gauge']" /><span>Dashboard</span>
                         </li>
                     </a>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center p-0" href="#" id="debtDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <font-awesome-icon :icon="['fas', 'credit-card']" /><span>Debt</span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="debtDropdown">
-                            <li>
-                                <a class="dropdown-item" href="/debt">Overview</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/debt/summary">Summary</a>
-                            </li>
-                        </ul>
-                    </li>
                     <a href="/todo">
                         <li class="nav-item">
                             <font-awesome-icon :icon="['fas', 'clipboard-list']" /><span>Todo</span>
