@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
 import { useTodoStore } from '@/features/todo/store/useTodoStore';
-import { useDebtStore } from '@/features/debt/store/useDebtStore';
 import { useWorkTaskStore } from '@/features/work/store/useWorkTaskStore';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const todoStore = useTodoStore();
-const debtStore = useDebtStore();
 const workTaskStore = useWorkTaskStore();
 
 const showAlert = ref(true);
 
 onMounted(() => {
     todoStore.fetchTodos?.();
-    debtStore.fetchDebts?.();
     workTaskStore.fetchWorkTasks?.();
 
     setTimeout(() => {
