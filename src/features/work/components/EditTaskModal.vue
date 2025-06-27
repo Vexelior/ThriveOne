@@ -74,13 +74,13 @@ async function handleTaskEdit() {
         id: taskId.value,
         title: taskTitle.value,
         description: taskDescription.value,
+        completedAt: taskCompletedDate.value,
+        dueDate: taskDueDate.value,
         priority: taskPriority.value,
         status: taskStatus.value,
-        dueDate: taskDueDate.value,
-        completedAt: taskCompletedDate.value,
+        html: taskHtml.value,
         isCompleted: taskStatus.value === 'Completed',
-        isDeleted: false,
-        html: marked(taskMarkdown.value),
+        isDeleted: false
     };
 
     await store.updateWorkTask(taskId.value, updatedTask)
@@ -156,6 +156,7 @@ function handleTaskDelete() {
                         <div class="card-body">
                             <form id="readmeForm">
                                 <input type="hidden" id="task-id" v-model="taskId">
+                                <input type="hidden" id="task-html" v-model="taskHtml">
                                 <div class="mb-3">
                                     <label for="titleInput" class="form-label">Title</label>
                                     <input type="text" class="form-control" id="task-title" required
