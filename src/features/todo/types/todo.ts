@@ -6,4 +6,5 @@ export interface Todo {
     completed: string | null;
     due: string | null;
     isCompleted: boolean;
+    timeOfDay: string | null;
 }

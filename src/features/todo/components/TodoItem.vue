@@ -51,6 +51,15 @@ const filteredTodos = computed(() => {
     });
 });
 
+const todosByTimeOfDay = computed(() => {
+    return {
+        General: filteredTodos.value.filter(todo => !todo.timeOfDay || (todo.timeOfDay !== 'Morning' && todo.timeOfDay !== 'Afternoon' && todo.timeOfDay !== 'Evening')),
+        Morning: filteredTodos.value.filter(todo => todo.timeOfDay === 'Morning'),
+        Afternoon: filteredTodos.value.filter(todo => todo.timeOfDay === 'Afternoon'),
+        Evening: filteredTodos.value.filter(todo => todo.timeOfDay === 'Evening'),
+    };
+});
+
 const formatDate = (date) => {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -91,59 +100,68 @@ const formatDate = (date) => {
             <span v-if="filteredTodos.length === 0" class="d-flex justify-content-center align-items-center mt-5">
                 No todos found. <font-awesome-icon :icon="['fas', 'frown']" class="ms-2 text-danger" />
             </span>
-            <div class="row g-3">
-                <div v-for="todo in filteredTodos" :key="todo.id" class="col-12 col-md-6 col-lg-4">
-                    <div class="card mb-3 todo-card h-100 shadow-sm">
-                        <div class="card-body pb-1">
-                            <div v-if="todo.isEditing">
-                                <input type="text" v-model="todo.title" class="form-control mb-2" />
-                                <textarea v-model="todo.description" class="form-control mb-2"></textarea>
-                                <input type="date" v-model="todo.due" class="form-control mb-2" />
-                                <button class="btn btn-success me-2" @click="saveTodo(todo)">Save</button>
-                                <button class="btn btn-secondary" @click="cancelEdit(todo, { ...todo })">Cancel</button>
-                            </div>
-                            <div v-else>
-                                <div class="d-flex align-items-center mb-2">
-                                    <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
-                                        todo.isCompleted = event.target.checked;
-                                        saveTodo(todo);
-                                    }" />
-                                    <span class="ms-2 w-100"
-                                        :class="{ 'text-decoration-line-through text-muted': todo.isCompleted }">
-                                        <b>{{ todo.title }}</b>
-                                    </span>
-                                    <div class="dropdown ms-auto text-end">
-                                        <button class="btn btn-sm dropdown-toggle" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <a class="dropdown-item" @click="() => { todo.isEditing = true; }">
-                                                Edit
-                                            </a>
-                                            <li>
-                                                <a class="dropdown-item text-danger" @click="deleteTodo(todo.id)">
-                                                    Delete
-                                                </a>
-                                            </li>
-                                        </ul>
+            <template v-else>
+                <div v-for="(todos, period) in todosByTimeOfDay" :key="period">
+                    <h5 v-if="todos.length" class="mt-4 mb-2">{{ period === 'General' ? 'General' : period }}</h5>
+                    <div class="row g-3">
+                        <div v-for="todo in todos" :key="todo.id" class="col-12 col-md-6 col-lg-4">
+                            <div class="card mb-3 todo-card h-100 shadow-sm">
+                                <div class="card-body pb-1">
+                                    <div v-if="todo.isEditing">
+                                        <input type="text" v-model="todo.title" class="form-control mb-2" />
+                                        <textarea v-model="todo.description" class="form-control mb-2"></textarea>
+                                        <input type="date" v-model="todo.due" class="form-control mb-2" />
+                                        <button class="btn btn-success me-2" @click="saveTodo(todo)">Save</button>
+                                        <button class="btn btn-secondary"
+                                            @click="cancelEdit(todo, { ...todo })">Cancel</button>
                                     </div>
-                                </div>
-                                <div class="mb-2 small">
-                                    <span v-if="todo.description" class="me-2 mb-2">{{ todo.description }}</span>
-                                    <span v-else class="me-2 mb-2 text-muted">No description.</span>
-                                    <div>
-                                        <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
-                                    </div>
-                                    <div v-if="todo.isCompleted">
-                                        <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed) }}</span>
+                                    <div v-else>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
+                                                todo.isCompleted = event.target.checked;
+                                                saveTodo(todo);
+                                            }" />
+                                            <span class="ms-2 w-100"
+                                                :class="{ 'text-decoration-line-through text-muted': todo.isCompleted }">
+                                                <b>{{ todo.title }}</b>
+                                            </span>
+                                            <div class="dropdown ms-auto text-end">
+                                                <button class="btn btn-sm dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <a class="dropdown-item" @click="() => { todo.isEditing = true; }">
+                                                        Edit
+                                                    </a>
+                                                    <li>
+                                                        <a class="dropdown-item text-danger"
+                                                            @click="deleteTodo(todo.id)">
+                                                            Delete
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2 small">
+                                            <span v-if="todo.description" class="me-2 mb-2">{{ todo.description
+                                            }}</span>
+                                            <span v-else class="me-2 mb-2 text-muted">No description.</span>
+                                            <div>
+                                                <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
+                                            </div>
+                                            <div v-if="todo.isCompleted">
+                                                <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed)
+                                                }}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
 </template>
