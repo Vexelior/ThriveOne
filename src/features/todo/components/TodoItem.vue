@@ -10,16 +10,18 @@ const search = ref('');
 
 store.showCompleted = false;
 
-const saveTodo = async (todo) => {
+const saveTodo = async (todo: Todo) => {
     isLoading.value = true;
     try {
         await store.updateTodo(todo.id, {
             id: todo.id,
             title: todo.title,
             description: todo.description,
+            created: todo.created || null,
             due: todo.due,
             isCompleted: todo.isCompleted,
-            completed: todo.isCompleted ? new Date().toISOString() : null
+            completed: todo.isCompleted ? new Date().toISOString() : null,
+            timeOfDay: todo.timeOfDay || null,
         });
         todo.isEditing = false;
     } catch (error) {
@@ -29,15 +31,15 @@ const saveTodo = async (todo) => {
     }
 };
 
-const deleteTodo = async (id) => {
+const deleteTodo = async (id: string | number) => {
     isLoading.value = true;
     if (confirm("Are you sure you want to delete this todo?")) {
-        await store.deleteTodo(id);
+        await store.deleteTodo(String(id));
     }
     isLoading.value = false;
 };
 
-const cancelEdit = (todo, originalTodo) => {
+const cancelEdit = (todo: Todo, originalTodo: Todo) => {
     Object.assign(todo, originalTodo);
     todo.isEditing = false;
 };
@@ -60,7 +62,7 @@ const todosByTimeOfDay = computed(() => {
     };
 });
 
-const formatDate = (date) => {
+const formatDate = (date: string | number | Date) => {
     const d = new Date(date);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -111,6 +113,12 @@ const formatDate = (date) => {
                                         <input type="text" v-model="todo.title" class="form-control mb-2" />
                                         <textarea v-model="todo.description" class="form-control mb-2"></textarea>
                                         <input type="date" v-model="todo.due" class="form-control mb-2" />
+                                        <select v-model="todo.timeOfDay" class="form-select mb-2">
+                                            <option value="" disabled selected>Select time of day</option>
+                                            <option value="Morning">Morning</option>
+                                            <option value="Afternoon">Afternoon</option>
+                                            <option value="Evening">Evening</option>
+                                        </select>
                                         <button class="btn btn-success me-2" @click="saveTodo(todo)">Save</button>
                                         <button class="btn btn-secondary"
                                             @click="cancelEdit(todo, { ...todo })">Cancel</button>
@@ -118,8 +126,11 @@ const formatDate = (date) => {
                                     <div v-else>
                                         <div class="d-flex align-items-center mb-2">
                                             <input type="checkbox" :checked="todo.isCompleted" @change="(event) => {
-                                                todo.isCompleted = event.target.checked;
-                                                saveTodo(todo);
+                                                const target = event.target as HTMLInputElement | null;
+                                                if (target) {
+                                                    todo.isCompleted = target.checked;
+                                                    saveTodo(todo);
+                                                }
                                             }" />
                                             <span class="ms-2 w-100"
                                                 :class="{ 'text-decoration-line-through text-muted': todo.isCompleted }">
@@ -148,11 +159,16 @@ const formatDate = (date) => {
                                             }}</span>
                                             <span v-else class="me-2 mb-2 text-muted">No description.</span>
                                             <div>
-                                                <b>Due:</b><span class="ms-2 me-2">{{ formatDate(todo.due) }}</span>
+                                                <b>Due:</b>
+                                                <span class="ms-2 me-2">
+                                                    {{ todo.due ? formatDate(todo.due) : 'No due date' }}
+                                                </span>
                                             </div>
                                             <div v-if="todo.isCompleted">
-                                                <b>Completed:</b><span class="ms-2 me-2">{{ formatDate(todo.completed)
-                                                }}</span>
+                                                <b>Completed:</b>
+                                                <span class="ms-2 me-2">
+                                                    {{ todo.completed ? formatDate(todo.completed) : 'No completion date' }}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>

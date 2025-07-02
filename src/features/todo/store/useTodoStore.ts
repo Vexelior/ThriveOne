@@ -32,7 +32,7 @@ export const useTodoStore = defineStore('todo', () => {
       })
   }
 
-  function addTodo(title: string, description: string, due: string) {
+  function addTodo(title: string, description: string, due: string, timeOfDay: string) {
     const newTodo: Todo = {
       id: '',
       title: title,
@@ -41,6 +41,7 @@ export const useTodoStore = defineStore('todo', () => {
       completed: null,
       due: due,
       isCompleted: false,
+      timeOfDay: timeOfDay
     }
     apiClient.post('/todo', newTodo)
       .then(() => {

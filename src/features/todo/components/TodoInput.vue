@@ -8,14 +8,16 @@ const newTodo = ref('')
 const title = ref('')
 const description = ref('')
 const due = ref('')
+const timeOfDay = ref('')
 const isLoading = ref(false)
 
 const handleSubmit = () => {
     isLoading.value = true
-    store.addTodo(title.value, description.value, due.value)
+    store.addTodo(title.value, description.value, due.value, timeOfDay.value)
     title.value = ''
     description.value = ''
     due.value = ''
+    timeOfDay.value = ''
     isLoading.value = false
     const modal = document.getElementById('createTodoModal')
     if (modal) {
@@ -58,6 +60,15 @@ const formatDate = (date) => {
                         <div class="mb-3">
                             <label for="todoDueDate" class="form-label">Due Date</label>
                             <input type="date" class="form-control" id="todoDueDate" required v-model="due" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="todoTimeOfDay" class="form-label">Time of Day</label>
+                            <select class="form-select" id="todoTimeOfDay" v-model="timeOfDay">
+                                <option value="" disabled selected>Select time of day</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Evening">Evening</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
