@@ -53,14 +53,12 @@ today.setHours(0, 0, 0, 0);
 const todosDueTodayOrOverdue = computed(() => {
     if (!Array.isArray(todoStore.todos)) return 0;
     return todoStore.todos.filter(t => {
-        if (t.isCompleted) return false;
-        if (!t.due) return false;
         const dueDate = new Date(t.due);
         dueDate.setHours(0, 0, 0, 0);
-        return dueDate <= today;
+        return dueDate.getTime() <= today.getTime();
     }).length;
 });
-const totalCompletedToday = computed(() => {
+const totalTodosNotCompletedToday = computed(() => {
     if (!Array.isArray(todoStore.todos)) return 0;
     return todoStore.todos.filter(t => t.isCompleted && new Date(t.completed).setHours(0, 0, 0, 0) >= today).length;
 });
@@ -126,7 +124,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
                 <div class="card text-bg-primary shadow-sm h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Todos</h5>
-                        <p class="display-6">{{ totalCompletedToday }}/{{ todosDueTodayOrOverdue }}</p>
+                        <p class="display-6">{{ totalTodosNotCompletedToday }}/{{ todosDueTodayOrOverdue }}</p>
                     </div>
                 </div>
             </div>
