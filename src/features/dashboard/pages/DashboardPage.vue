@@ -47,8 +47,23 @@ const motivationalQuotes = [
 ];
 
 // Quick Stats
-const totalTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.length : 0);
-const completedTodos = computed(() => Array.isArray(todoStore.todos) ? todoStore.todos.filter(t => t.isCompleted).length : 0);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const todosDueTodayOrOverdue = computed(() => {
+    if (!Array.isArray(todoStore.todos)) return 0;
+    return todoStore.todos.filter(t => {
+        if (t.isCompleted) return false;
+        if (!t.due) return false;
+        const dueDate = new Date(t.due);
+        dueDate.setHours(0, 0, 0, 0);
+        return dueDate <= today;
+    }).length;
+});
+const totalCompletedToday = computed(() => {
+    if (!Array.isArray(todoStore.todos)) return 0;
+    return todoStore.todos.filter(t => t.isCompleted && new Date(t.completed).setHours(0, 0, 0, 0) >= today).length;
+});
 const totalCompletedWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.filter(t => t.isCompleted).length : 0);
 const totalWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? workTaskStore.workTasks.length : 0);
 
@@ -111,7 +126,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
                 <div class="card text-bg-primary shadow-sm h-100">
                     <div class="card-body text-center">
                         <h5 class="card-title">Todos</h5>
-                        <p class="display-6">{{ completedTodos }}/{{ totalTodos }}</p>
+                        <p class="display-6">{{ totalCompletedToday }}/{{ todosDueTodayOrOverdue }}</p>
                     </div>
                 </div>
             </div>
@@ -150,7 +165,7 @@ const recentWorkTasks = computed(() => Array.isArray(workTaskStore.workTasks) ? 
 
             <div class="col-md-6">
                 <!-- This Week’s Focus -->
-                <h3 class="mb-3">This Week's Focus</h3>
+                <h3 class="mb-3">This Week's Work Focus</h3>
                 <div v-if="upcomingWorkTasks && upcomingWorkTasks.length > 0" class="this-week-focus mb-4">
                     <ul class="list-group">
                         <li v-for="task in (Array.isArray(upcomingWorkTasks) ? upcomingWorkTasks : (upcomingWorkTasks ? [upcomingWorkTasks] : []))"
